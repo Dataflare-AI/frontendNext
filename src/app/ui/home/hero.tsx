@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Container from "./container";
-import heroImg from "public/hero  .jpeg";
+import heroImg from "public/landing.png";
 import { openSans } from "@/app/ui/fonts";
 
 const Hero = () => {
@@ -27,7 +27,7 @@ const Hero = () => {
                 Entrar
               </a>
               <a
-                href="https://github.com/Dataflare-AI/frontend_NextJs"
+                href="https://github.com/Dataflare-AI/frontendNext"
                 target="_blank"
                 rel="noopener"
                 className="flex items-center space-x-2 text-gray-500 dark:text-gray-400"
@@ -53,7 +53,7 @@ const Hero = () => {
           <div className="">
             <Image
               src={heroImg}
-              width="616"
+              width="580"
               height="617"
               className={"object-cover rounded-md"}
               alt="Hero Illustration"
