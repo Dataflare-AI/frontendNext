@@ -36,6 +36,7 @@ function ImportFiles() {
   const [areColumnsLoaded, setAreColumnsLoaded] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
   const [totalRows, setTotalRows] = useState<number | null>(null);
+  const [fileSize, setFileSize] = useState<number | null>(null);
 
   // Efeito para carregar os dados da folha quando a folha é selecionada
   useEffect(() => {
@@ -58,6 +59,9 @@ function ImportFiles() {
   const processarArquivo = async () => {
     try {
       if (excelFile !== null) {
+        const fileSizeInKB = (excelFile.byteLength / 1024).toFixed(2); // Formata o tamanho do arquivo em KB com duas casas decimais
+        setFileSize(fileSizeInKB);
+
         const workbook = XLSX.read(excelFile, { type: "buffer" });
         const sheetNames = workbook.SheetNames;
         setSheetsList(sheetNames);
@@ -76,7 +80,7 @@ function ImportFiles() {
 
         // Processa as linhas uma a uma
         for (let rowIndex = 0; rowIndex < totalRows; rowIndex++) {
-          const percentage = (rowIndex / totalRows) * 100;
+          const percentage = ((rowIndex + 1) / totalRows) * 100;
           setProgress(percentage);
 
           // Simulação de processamento mais rápido (ajuste conforme necessário)
@@ -315,9 +319,13 @@ function ImportFiles() {
 
       {totalRows && (
         <div className="mt-4">
-          <p className="text-lg">
-            Número total de linhas no arquivo: {totalRows}
-          </p>
+          <p className="">Linhas: {totalRows}</p>
+        </div>
+      )}
+
+      {fileSize && (
+        <div className="mt-2">
+          <p className="">Tamanho: {fileSize}KB</p>
         </div>
       )}
 
