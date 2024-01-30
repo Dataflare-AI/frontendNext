@@ -1,6 +1,6 @@
 "use client";
 
-// ImportFiles.tsx
+// Importações necessárias
 import React, { ChangeEvent, FormEvent, useState, useEffect } from "react";
 import * as XLSX from "xlsx";
 
@@ -18,8 +18,9 @@ const LoadingModal: React.FC<{ visible: boolean }> = ({ visible }) => {
   );
 };
 
-// Defina o componente
+// Definição do componente
 function ImportFiles() {
+  // Estados necessários
   const [excelFile, setExcelFile] = useState<ArrayBuffer | null>(null);
   const [typeError, setTypeError] = useState<string | null>(null);
   const [excelData, setExcelData] = useState<any[] | null>(null);
@@ -33,15 +34,18 @@ function ImportFiles() {
   );
   const [isSheetLoading, setIsSheetLoading] = useState<boolean>(false);
   const [areColumnsLoaded, setAreColumnsLoaded] = useState<boolean>(false);
+  const [progress, setProgress] = useState<number>(0);
+  const [totalRows, setTotalRows] = useState<number | null>(null);
 
+  // Efeito para carregar os dados da folha quando a folha é selecionada
   useEffect(() => {
     const fetchData = async () => {
-      setIsSheetLoading(true); // Inicia o carregamento da folha de cálculo
+      setIsSheetLoading(true);
 
       try {
         await processarArquivo();
       } finally {
-        setIsSheetLoading(false); // Finaliza o carregamento da folha de cálculo
+        setIsSheetLoading(false);
       }
     };
 
@@ -50,32 +54,45 @@ function ImportFiles() {
     }
   }, [selectedSheet]);
 
+  // Função para processar o arquivo
   const processarArquivo = async () => {
-    return new Promise<void>((resolve) => {
-      setTimeout(() => {
-        try {
-          if (excelFile !== null) {
-            const workbook = XLSX.read(excelFile, { type: "buffer" });
-            const sheetNames = workbook.SheetNames;
-            setSheetsList(sheetNames);
+    try {
+      if (excelFile !== null) {
+        const workbook = XLSX.read(excelFile, { type: "buffer" });
+        const sheetNames = workbook.SheetNames;
+        setSheetsList(sheetNames);
 
-            // Atualiza a folha (sheet) selecionada
-            const selectedWorksheet =
-              workbook.Sheets[selectedSheet || sheetNames[0]];
-            const data = XLSX.utils.sheet_to_json(selectedWorksheet);
+        const selectedWorksheet =
+          workbook.Sheets[selectedSheet || sheetNames[0]];
+        const data = XLSX.utils.sheet_to_json(selectedWorksheet);
 
-            setExcelData(data.slice(0, 10)); // Atualiza a visualização com os primeiros 10 itens
-            setSelectedSheetData(data);
-            setAreColumnsLoaded(false); // Reseta o estado quando a folha é trocada
-            updateColumnsForSheet(selectedSheet);
-          }
-        } catch (error) {
-          console.error("Erro durante o processamento do arquivo:", error);
-        } finally {
-          resolve();
+        setExcelData(data.slice(0, 10));
+        setSelectedSheetData(data);
+        setAreColumnsLoaded(false);
+        updateColumnsForSheet(selectedSheet);
+
+        const totalRows = data.length;
+        setTotalRows(totalRows);
+
+        // Processa as linhas uma a uma
+        for (let rowIndex = 0; rowIndex < totalRows; rowIndex++) {
+          const percentage = (rowIndex / totalRows) * 100;
+          setProgress(percentage);
+
+          // Simulação de processamento mais rápido (ajuste conforme necessário)
+          await new Promise((resolve) => setTimeout(resolve, 1)); // Reduzi para 1 milissegundo
         }
-      }, 3000);
-    });
+
+        // Garante que a barra de progresso atinge exatamente 100%
+        setProgress(100);
+
+        setSelectedColumn(Object.keys(data[0])[0]);
+        setSelectedSheetData(data);
+        setAreColumnsLoaded(true);
+      }
+    } catch (error) {
+      console.error("Erro durante o processamento do arquivo:", error);
+    }
   };
 
   // Lógica para manipular a seleção de arquivo
@@ -111,56 +128,19 @@ function ImportFiles() {
     }
   };
 
+  // Lógica para selecionar a folha
   const handleSheetSelect = (e: ChangeEvent<HTMLSelectElement>) => {
     const selectedSheetName = e.target.value;
     setSelectedSheet(selectedSheetName);
-    setAreColumnsLoaded(false); // Reseta o estado quando a folha é trocada
+    setAreColumnsLoaded(false);
     updateColumnsForSheet(selectedSheetName);
-  };
-
-  const updateColumnsForSheet = async (sheetName: string | null) => {
-    if (excelFile !== null && sheetName !== null) {
-      setIsSheetLoading(true); // Inicia o carregamento das colunas da nova folha
-
-      try {
-        const workbook = XLSX.read(excelFile, { type: "buffer" });
-        const selectedWorksheet = workbook.Sheets[sheetName];
-        const data: ExcelDataItem[] =
-          XLSX.utils.sheet_to_json(selectedWorksheet);
-        const columns = Object.keys(data[0]);
-
-        setSelectedColumn(columns[0]);
-        setSelectedSheetData(data);
-        setAreColumnsLoaded(true);
-      } catch (error) {
-        console.error("Erro durante o processamento das colunas:", error);
-      } finally {
-        setIsSheetLoading(false); // Finaliza o carregamento das colunas
-      }
-    }
-  };
-
-  const handleFileSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    try {
-      await processarArquivo();
-    } finally {
-      setIsLoading(false);
-    }
   };
 
   // Lógica para enviar mensagem para a OpenAI
   const sendMessageToOpenAI = async () => {
     try {
-      // Implemente a lógica para enviar a mensagem para a API da OpenAI
-      // e receber a resposta do ChatGPT aqui
-
       console.log(`Mensagem enviada para a OpenAI: ${chatPrompt}`);
-
-      // A resposta do ChatGPT será tratada aqui
-      // (quando a integração com a API da OpenAI estiver pronta)
+      // Lógica de envio para a OpenAI aqui
     } catch (error) {
       console.error("Erro durante o envio da mensagem:", error);
     }
@@ -170,7 +150,7 @@ function ImportFiles() {
   const handleColumnSelect = (e: ChangeEvent<HTMLSelectElement>) => {
     setSelectedColumn(e.target.value);
 
-    // Adicione a lógica para rolar até o final da página apenas em telas maiores que 768 pixels
+    // Lógica para rolar até o final da página apenas em telas maiores que 768 pixels
     if (window.innerWidth > 768) {
       const dropdownScrollOptions = {
         top: document.getElementById("columnDropdown")?.offsetTop || 0,
@@ -222,12 +202,66 @@ function ImportFiles() {
     }
   };
 
+  // Lógica para atualizar as colunas da folha
+  const updateColumnsForSheet = async (sheetName: string | null) => {
+    if (excelFile !== null && sheetName !== null) {
+      setIsSheetLoading(true);
+
+      try {
+        const workbook = XLSX.read(excelFile, { type: "buffer" });
+        const selectedWorksheet = workbook.Sheets[sheetName];
+        const data = XLSX.utils.sheet_to_json(selectedWorksheet);
+        const columns = Object.keys(data[0]);
+
+        setSelectedColumn(columns[0]);
+        setSelectedSheetData(data);
+        setAreColumnsLoaded(true);
+      } catch (error) {
+        console.error("Erro durante o processamento das colunas:", error);
+      } finally {
+        setIsSheetLoading(false);
+      }
+    }
+  };
+
+  // Lógica para manipular o envio do formulário
+  const handleFileSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      // Reinicia a barra de progresso antes do processamento
+      setProgress(0);
+      await processarArquivo();
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Renderização do componente
   return (
     <div className="wrapper p-8 bg-white">
+      {isLoading && (
+        <div className="relative pt-1">
+          <div className="flex mb-2 items-center justify-between">
+            <div></div>
+            <div className="text-right">
+              <span className="text-xs font-semibold inline-block text-blueGray-600">
+                {`${Math.round(progress)}%`}
+              </span>
+            </div>
+          </div>
+          <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-blueGray-200">
+            <div
+              style={{ width: `${Math.round(progress)}%` }}
+              className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-black"
+            ></div>
+          </div>
+        </div>
+      )}
       <h3 className="text-3xl font-bold mb-6">
         Importar & Visualizar Arquivos
       </h3>
-
       <form className="form-group custom-form" onSubmit={handleFileSubmit}>
         <div className="flex flex-col md:flex-row items-stretch">
           <input
@@ -279,11 +313,19 @@ function ImportFiles() {
         )}
       </form>
 
+      {totalRows && (
+        <div className="mt-4">
+          <p className="text-lg">
+            Número total de linhas no arquivo: {totalRows}
+          </p>
+        </div>
+      )}
+
       <LoadingModal
         visible={(isLoading || isSheetLoading) && selectedSheet !== null}
       />
 
-      {excelData && (
+      {progress === 100 && totalRows && (
         <div className="mt-4">
           <label htmlFor="sheetDropdown" className="text-lg">
             Selecione uma página:
@@ -302,7 +344,6 @@ function ImportFiles() {
             ))}
           </select>
 
-          {/* Dropdown de Seleção de Coluna */}
           {selectedSheetData && (
             <div className="mt-4">
               <label htmlFor="columnDropdown" className="text-lg">

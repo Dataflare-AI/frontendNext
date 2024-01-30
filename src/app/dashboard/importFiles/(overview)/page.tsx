@@ -1,4 +1,4 @@
-import ImportFiles from "@/app/ui/importFIles/importFIles";
+import ImportFiles from "@/app/ui/importFiles/importFiles";
 import { ThemeProvider } from "@/app/context/ThemeProvider";
 
 export default function LoginPage() {
