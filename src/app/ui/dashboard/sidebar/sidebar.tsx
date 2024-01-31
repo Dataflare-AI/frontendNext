@@ -1,8 +1,7 @@
+"use client";
 import Image from "next/image";
 import MenuLink from "./menuLink/menuLink";
 import styles from "./sidebar.module.css";
-import Link from "next/link";
-import { useEffect, useState } from "react";
 
 import {
   MdDashboard,
@@ -16,8 +15,6 @@ import {
   MdLogout,
 } from "react-icons/md";
 import { FaFileExcel } from "react-icons/fa";
-
-// import { auth, signOut } from "@/app/auth";
 
 const menuItems = [
   {
@@ -82,8 +79,7 @@ const menuItems = [
   },
 ];
 
-const Sidebar = async () => {
-  // const { user } = await auth();
+export default function Sidebar() {
   return (
     <div className={styles.container}>
       <div className={styles.user}>
@@ -95,7 +91,6 @@ const Sidebar = async () => {
           height="50"
         />
         <div className={styles.userDetail}>
-          {/* <span className={styles.username}>{user.username}</span> */}
           <span className={styles.userTitle}>Administrator</span>
         </div>
       </div>
@@ -109,20 +104,6 @@ const Sidebar = async () => {
           </li>
         ))}
       </ul>
-      {/* <form
-        action={async () => {
-          "use server";
-        }}
-      >
-        <Link href={"/login"}>
-          <button className={styles.logout}>
-            <MdLogout />
-            Logout
-          </button>
-        </Link>
-      </form> */}
     </div>
   );
-};
-
-export default Sidebar;
+}
