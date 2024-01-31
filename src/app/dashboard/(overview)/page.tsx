@@ -10,8 +10,8 @@ const Dashboard = () => {
   // const session = useSession();
   return (
     <div>
-      {/* <div>{session?.data?.user?.name}</div>
-      <button onClick={() => signOut()}>Logout</button> */}
+      {/* <div>{session?.data?.user?.name}</div> */}
+      {/* <button onClick={() => signOut()}>Logout</button> */}
       <div className={styles.wrapper}>
         <div className={styles.main}>
           <div className={styles.cards}>

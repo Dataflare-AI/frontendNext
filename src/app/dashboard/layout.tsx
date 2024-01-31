@@ -6,23 +6,27 @@ import Footer from "../ui/dashboard/footer/footer";
 import "src/app/globals.css";
 import SessionProvider from "../SessionProvider";
 
-interface LayoutProps {
-  children: ReactNode;
-}
-
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <div className={styles.container}>
-      <div className={styles.menu}>
-        <Sidebar />
-      </div>
-      <div className={styles.content}>
-        <Navbar />
-        {children}
-        <Footer />
-      </div>
-    </div>
+    <html lang="en">
+      <body>
+        <SessionProvider>
+          <div className={styles.container}>
+            <div className={styles.menu}>
+              <Sidebar />
+            </div>
+            <div className={styles.content}>
+              <Navbar />
+              {children}
+              <Footer />
+            </div>
+          </div>
+        </SessionProvider>
+      </body>
+    </html>
   );
-};
-
-export default Layout;
+}
