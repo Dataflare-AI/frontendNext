@@ -74,7 +74,15 @@ function ImportFiles() {
         setExcelData(data.slice(0, 10));
         setSelectedSheetData(data);
         setAreColumnsLoaded(false);
-        updateColumnsForSheet(selectedSheet);
+
+        if (data.length > 0 && typeof data[0] === "object") {
+          // Verifique se data[0] é um objeto
+          setSelectedColumn(Object.keys(data[0])[0]);
+          setSelectedSheetData(data);
+          setAreColumnsLoaded(true);
+        } else {
+          console.error("Os dados da folha não são do tipo esperado.");
+        }
 
         const totalRows = data.length;
         setTotalRows(totalRows);
