@@ -11,6 +11,7 @@ interface NextAuthSession {
   name?: string | null;
   email?: string | null;
   image?: string | null;
+  expires: Date; // Adicione a propriedade 'expires' ao tipo
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -19,6 +20,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     name: "User Name",
     email: "user@example.com",
     image: "https://example.com/avatar.png",
+    expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 dias em milissegundos
   };
 
   return (
