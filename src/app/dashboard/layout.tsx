@@ -7,11 +7,11 @@ import "src/app/globals.css";
 import SessionProvider from "../SessionProvider";
 import { useSession } from "next-auth/react";
 
-type LayoutProps = {
+interface LayoutProps {
   children: ReactNode;
-};
+}
 
-export default function Layout({ children }) {
+export default function Layout({ children }: LayoutProps) {
   const { data: session, status } = useSession();
 
   return (
