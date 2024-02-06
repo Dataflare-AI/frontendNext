@@ -2,7 +2,7 @@
 
 import React, { useEffect, ReactNode } from "react";
 
-import data from "data.json";
+import data from "../../../data.json";
 
 const THEME_KEY = "theme";
 export const ThemeContext = React.createContext({});
