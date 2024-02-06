@@ -59,8 +59,9 @@ function ImportFiles() {
   const processarArquivo = async () => {
     try {
       if (excelFile !== null) {
-        const fileSizeInKB = (excelFile.byteLength / 1024).toFixed(2); // Formata o tamanho do arquivo em KB com duas casas decimais
-        setFileSize(fileSizeInKB);
+        const fileSizeInKB = (excelFile.byteLength / 1024).toFixed(2);
+        const fileSizeAsNumber = parseFloat(fileSizeInKB); // Converter a string para um número
+        setFileSize(fileSizeAsNumber);
 
         const workbook = XLSX.read(excelFile, { type: "buffer" });
         const sheetNames = workbook.SheetNames;
