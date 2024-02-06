@@ -60,8 +60,7 @@ function ImportFiles() {
     try {
       if (excelFile !== null) {
         const fileSizeInKB = (excelFile.byteLength / 1024).toFixed(2);
-        const fileSizeAsNumber = parseFloat(fileSizeInKB);
-        setFileSize(fileSizeAsNumber);
+        setFileSize(parseFloat(fileSizeInKB));
 
         const workbook = XLSX.read(excelFile, { type: "buffer" });
         const sheetNames = workbook.SheetNames;
@@ -84,7 +83,7 @@ function ImportFiles() {
           setSelectedSheetData(data);
           setAreColumnsLoaded(true);
         } else {
-          console.error("Os dados da folha não são do tipo esperado!.");
+          console.error("Os dados da folha não são do tipo esperado.");
         }
 
         const totalRows = data.length;
