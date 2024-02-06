@@ -84,7 +84,7 @@ function ImportFiles() {
           setSelectedSheetData(data);
           setAreColumnsLoaded(true);
         } else {
-          console.error("Os dados da folha não são do tipo esperado.");
+          console.error("Os dados da folha não são do tipo esperado!.");
         }
 
         const totalRows = data.length;
