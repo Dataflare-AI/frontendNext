@@ -12,10 +12,10 @@ interface LayoutProps {
 }
 
 export default function Layout({ children }: LayoutProps) {
-  const { data: session, status } = useSession();
+  // const { data: session, status } = useSession();
 
   return (
-    <SessionProvider session={session}>
+    // <SessionProvider session={session}>
       <div className={styles.container}>
         <div className={styles.menu}>
           <Sidebar />
@@ -26,6 +26,6 @@ export default function Layout({ children }: LayoutProps) {
           <Footer />
         </div>
       </div>
-    </SessionProvider>
+    // </SessionProvider>
   );
 }
