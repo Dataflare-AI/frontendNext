@@ -3,6 +3,10 @@
 import React, { ChangeEvent, FormEvent, useState, useEffect } from "react";
 import * as XLSX from "xlsx";
 
+type ExcelDataItem = {
+  [key: string]: any; // Aqui você pode ajustar as chaves e tipos conforme necessário
+};
+
 const LoadingModal: React.FC<{ visible: boolean }> = ({ visible }) => {
   if (!visible) {
     return null;
