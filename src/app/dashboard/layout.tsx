@@ -14,7 +14,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <SessionProvider>
+        <SessionProvider session={}>
           <div className={styles.container}>
             <div className={styles.menu}>
               <Sidebar />
