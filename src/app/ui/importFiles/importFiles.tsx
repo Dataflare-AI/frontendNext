@@ -3,8 +3,6 @@
 import React, { ChangeEvent, FormEvent, useState, useEffect } from "react";
 import * as XLSX from "xlsx";
 
-type ExcelDataItem = Record<string, any>;
-
 const LoadingModal: React.FC<{ visible: boolean }> = ({ visible }) => {
   if (!visible) {
     return null;
@@ -63,20 +61,20 @@ function ImportFiles() {
 
         const selectedWorksheet =
           workbook.Sheets[selectedSheet || sheetNames[0]];
-        const data = XLSX.utils.sheet_to_json(selectedWorksheet);
+        const data: ExcelDataItem[] =
+          XLSX.utils.sheet_to_json(selectedWorksheet);
 
-        setExcelData(data.slice(0, 10));
-        setSelectedSheetData(data);
-        setAreColumnsLoaded(false);
-
+        // Verifique se os dados são do tipo esperado antes de definir o estado
         if (
+          Array.isArray(data) &&
           data.length > 0 &&
           typeof data[0] === "object" &&
           data[0] !== null
         ) {
-          setSelectedColumn(Object.keys(data[0] as Record<string, any>)[0]);
+          setExcelData(data.slice(0, 10));
           setSelectedSheetData(data);
           setAreColumnsLoaded(true);
+          setSelectedColumn(Object.keys(data[0])[0]);
         } else {
           console.error("Os dados da folha não são do tipo esperado.");
         }
@@ -84,12 +82,16 @@ function ImportFiles() {
         const totalRows = data.length;
         setTotalRows(totalRows);
 
+        // Processa as linhas uma a uma
         for (let rowIndex = 0; rowIndex < totalRows; rowIndex++) {
           const percentage = ((rowIndex + 1) / totalRows) * 100;
           setProgress(percentage);
-          await new Promise((resolve) => setTimeout(resolve, 1));
+
+          // Simulação de processamento mais rápido (ajuste conforme necessário)
+          await new Promise((resolve) => setTimeout(resolve, 1)); // Reduzi para 1 milissegundo
         }
 
+        // Garante que a barra de progresso atinge exatamente 100%
         setProgress(100);
       }
     } catch (error) {
