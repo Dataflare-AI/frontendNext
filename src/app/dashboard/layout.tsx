@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { Children, ReactNode } from "react";
 import Navbar from "../ui/dashboard/navbar/navbar";
 import Sidebar from "../ui/dashboard/sidebar/sidebar";
 import styles from "../ui/dashboard/dashboard.module.css";
@@ -8,19 +8,17 @@ import SessionProvider from "../SessionProvider";
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <div>
-      <SessionProvider session={}>
-        <div className={styles.container}>
-          <div className={styles.menu}>
-            <Sidebar />
-          </div>
-          <div className={styles.content}>
-            <Navbar />
-            {children}
-            <Footer />
-          </div>
+    <SessionProvider>
+      <div className={styles.container}>
+        <div className={styles.menu}>
+          <Sidebar />
         </div>
-      </SessionProvider>
-    </div>
+        <div className={styles.content}>
+          <Navbar />
+          {children}
+          <Footer />
+        </div>
+      </div>
+    </SessionProvider>
   );
 }
