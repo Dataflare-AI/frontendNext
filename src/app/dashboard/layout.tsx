@@ -6,27 +6,21 @@ import Footer from "../ui/dashboard/footer/footer";
 import "src/app/globals.css";
 import SessionProvider from "../SessionProvider";
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
-      <body>
-        <SessionProvider session={}>
-          <div className={styles.container}>
-            <div className={styles.menu}>
-              <Sidebar />
-            </div>
-            <div className={styles.content}>
-              <Navbar />
-              {children}
-              <Footer />
-            </div>
+    <div>
+      <SessionProvider session={}>
+        <div className={styles.container}>
+          <div className={styles.menu}>
+            <Sidebar />
           </div>
-        </SessionProvider>
-      </body>
-    </html>
+          <div className={styles.content}>
+            <Navbar />
+            {children}
+            <Footer />
+          </div>
+        </div>
+      </SessionProvider>
+    </div>
   );
 }
