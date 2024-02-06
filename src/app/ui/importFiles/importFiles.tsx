@@ -60,7 +60,7 @@ function ImportFiles() {
     try {
       if (excelFile !== null) {
         const fileSizeInKB = (excelFile.byteLength / 1024).toFixed(2);
-        const fileSizeAsNumber = parseFloat(fileSizeInKB); // Converter a string para um número
+        const fileSizeAsNumber = parseFloat(fileSizeInKB);
         setFileSize(fileSizeAsNumber);
 
         const workbook = XLSX.read(excelFile, { type: "buffer" });
@@ -75,9 +75,12 @@ function ImportFiles() {
         setSelectedSheetData(data);
         setAreColumnsLoaded(false);
 
-        if (data.length > 0 && typeof data[0] === "object") {
-          // Verifique se data[0] é um objeto
-          setSelectedColumn(Object.keys(data[0])[0]);
+        if (
+          data.length > 0 &&
+          typeof data[0] === "object" &&
+          data[0] !== null
+        ) {
+          setSelectedColumn(Object.keys(data[0] as Record<string, any>)[0]);
           setSelectedSheetData(data);
           setAreColumnsLoaded(true);
         } else {
