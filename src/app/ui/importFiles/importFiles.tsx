@@ -51,7 +51,7 @@ function ImportFiles() {
       }
     };
 
-    if (selectedSheet !== null) {
+    if (selectedSheetData !== null) {
       fetchData();
     }
   }, [selectedSheet]);
