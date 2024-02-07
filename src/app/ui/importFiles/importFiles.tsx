@@ -67,7 +67,7 @@ function ImportFiles() {
         setSheetsList(sheetNames);
 
         const selectedWorksheet =
-          workbook.Sheets[selectedSheetName || sheetNames[0]];
+          workbook.Sheets[selectedSheet || sheetNames[0]];
         const data: ExcelRow[] = XLSX.utils.sheet_to_json(selectedWorksheet);
 
         // Verifique se os dados são do tipo esperado antes de definir o estado
