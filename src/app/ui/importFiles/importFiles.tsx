@@ -54,7 +54,7 @@ function ImportFiles() {
     if (selectedSheetData !== null) {
       fetchData();
     }
-  }, [selectedSheet]);
+  }, [selectedSheetData]);
 
   const processarArquivo = async () => {
     try {
