@@ -1,15 +1,18 @@
 "use client";
 
+// Importações necessárias
 import React, { ChangeEvent, FormEvent, useState, useEffect } from "react";
 import * as XLSX from "xlsx";
+// import {
+//   Dialog,
+//   DialogContent,
+//   DialogDescription,
+//   DialogHeader,
+//   DialogTitle,
+//   DialogTrigger,
+// } from "@/components/ui/dialog";
 
-type ExcelDataItem = {
-  [key: string]: any; // Aqui você pode ajustar as chaves e tipos conforme necessário
-};
-
-type ExcelRow = {
-  [key: string]: any;
-};
+type ExcelDataItem = Record<string, any>; // Ajuste o tipo conforme necessário
 
 const LoadingModal: React.FC<{ visible: boolean }> = ({ visible }) => {
   if (!visible) {
@@ -23,24 +26,27 @@ const LoadingModal: React.FC<{ visible: boolean }> = ({ visible }) => {
   );
 };
 
+// Definição do componente
 function ImportFiles() {
+  // Estados necessários
   const [excelFile, setExcelFile] = useState<ArrayBuffer | null>(null);
   const [typeError, setTypeError] = useState<string | null>(null);
-  const [excelData, setExcelData] = useState<ExcelDataItem[] | null>(null);
-  const [selectedColumn, setSelectedColumn] = useState<string>("");
+  const [excelData, setExcelData] = useState<any[] | null>(null);
+  const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
   const [chatPrompt, setChatPrompt] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [selectedSheet, setSelectedSheet] = useState<string | null>(null); // Adicionando o estado selectedSheet
-  const [selectedSheetData, setSelectedSheetData] = useState<ExcelRow[] | null>(
+  const [selectedSheet, setSelectedSheet] = useState<string | null>(null);
+  const [sheetsList, setSheetsList] = useState<string[]>([]);
+  const [selectedSheetData, setSelectedSheetData] = useState<any[] | null>(
     null
   );
-  const [sheetsList, setSheetsList] = useState<string[]>([]);
   const [isSheetLoading, setIsSheetLoading] = useState<boolean>(false);
   const [areColumnsLoaded, setAreColumnsLoaded] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
   const [totalRows, setTotalRows] = useState<number | null>(null);
   const [fileSize, setFileSize] = useState<number | null>(null);
 
+  // Efeito para carregar os dados da folha quando a folha é selecionada
   useEffect(() => {
     const fetchData = async () => {
       setIsSheetLoading(true);
@@ -52,16 +58,19 @@ function ImportFiles() {
       }
     };
 
-    if (selectedSheetData !== null) {
+    if (selectedSheet !== null) {
       fetchData();
     }
-  }, [selectedSheetData]);
+  }, [selectedSheet]);
+
+  const CHUNK_SIZE = 1000; // Tamanho do bloco para processamento
 
   const processarArquivo = async () => {
     try {
       if (excelFile !== null) {
         const fileSizeInKB = (excelFile.byteLength / 1024).toFixed(2);
-        setFileSize(parseFloat(fileSizeInKB));
+        const fileSizeAsNumber = parseFloat(fileSizeInKB);
+        setFileSize(fileSizeAsNumber);
 
         const workbook = XLSX.read(excelFile, { type: "buffer" });
         const sheetNames = workbook.SheetNames;
@@ -69,19 +78,20 @@ function ImportFiles() {
 
         const selectedWorksheet =
           workbook.Sheets[selectedSheet || sheetNames[0]];
-        const data: ExcelRow[] = XLSX.utils.sheet_to_json(selectedWorksheet);
+        const data = XLSX.utils.sheet_to_json(selectedWorksheet);
 
-        // Verifique se os dados são do tipo esperado antes de definir o estado
+        setExcelData(data.slice(0, 10));
+        setSelectedSheetData(data);
+        setAreColumnsLoaded(false);
+
         if (
-          Array.isArray(data) &&
           data.length > 0 &&
           typeof data[0] === "object" &&
           data[0] !== null
         ) {
-          setExcelData(data.slice(0, 10));
+          setSelectedColumn(Object.keys(data[0] as Record<string, any>)[0]);
           setSelectedSheetData(data);
           setAreColumnsLoaded(true);
-          setSelectedColumn(Object.keys(data[0])[0]);
         } else {
           console.error("Os dados da folha não são do tipo esperado.");
         }
@@ -89,14 +99,38 @@ function ImportFiles() {
         const totalRows = data.length;
         setTotalRows(totalRows);
 
-        // Processa as linhas uma a uma
-        for (let rowIndex = 0; rowIndex < totalRows; rowIndex++) {
-          const percentage = ((rowIndex + 1) / totalRows) * 100;
-          setProgress(percentage);
+        const startTime = performance.now(); // Tempo de início do processamento
+        const CHUNK_SIZE = Math.ceil(totalRows / 10); // Tamanho do bloco ajustado dinamicamente
 
-          // Simulação de processamento mais rápido (ajuste conforme necessário)
-          await new Promise((resolve) => setTimeout(resolve, 1)); // Reduzi para 1 milissegundo
+        // Processa as linhas em blocos
+        let processedRows = 0;
+        for (let start = 0; start < totalRows; start += CHUNK_SIZE) {
+          const end = Math.min(start + CHUNK_SIZE, totalRows);
+          const chunk = data.slice(start, end);
+
+          // Processamento do bloco
+          console.log(`Processando linhas de ${start + 1} a ${end}`);
+          // Aqui você pode realizar o processamento do bloco como desejar
+          // Por exemplo, enviar o bloco para a OpenAI aqui
+          // Ou realizar qualquer outra operação desejada
+          await processarBloco(chunk);
+
+          processedRows += chunk.length;
+          const percentage = (processedRows / totalRows) * 100;
+          setProgress(percentage);
         }
+
+        const endTime = performance.now(); // Tempo de término do processamento
+        const processingTime = endTime - startTime; // Tempo total de processamento
+
+        // Calcula o tempo necessário para processar 100 KB do arquivo
+        const timePer100KB = (processingTime / fileSizeAsNumber) * 100;
+        const estimatedTime = timePer100KB * 100; // Tempo estimado para processar o arquivo inteiro
+
+        // Agora você pode utilizar o tempo estimado para exibir uma barra de progresso ou outra indicação visual do progresso
+        console.log(
+          `Tempo estimado de processamento: ${estimatedTime} milissegundos`
+        );
 
         // Garante que a barra de progresso atinge exatamente 100%
         setProgress(100);
@@ -106,6 +140,15 @@ function ImportFiles() {
     }
   };
 
+  // Função para processar um bloco de dados
+  const processarBloco = async (blockData: any[]) => {
+    // Implemente o processamento do bloco conforme necessário
+    // Por exemplo, você pode enviar esse bloco para a OpenAI aqui
+    // Ou realizar qualquer outra operação desejada
+    await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulação de processamento
+  };
+
+  // Lógica para manipular a seleção de arquivo
   const handleFile = async (e: ChangeEvent<HTMLInputElement>) => {
     try {
       let fileTypes = [
@@ -138,13 +181,15 @@ function ImportFiles() {
     }
   };
 
+  // Lógica para selecionar a folha
   const handleSheetSelect = (e: ChangeEvent<HTMLSelectElement>) => {
     const selectedSheetName = e.target.value;
-    setSelectedSheet(selectedSheetName); // Definindo o valor selecionado para selectedSheet
+    setSelectedSheet(selectedSheetName);
     setAreColumnsLoaded(false);
     updateColumnsForSheet(selectedSheetName);
   };
 
+  // Lógica para enviar mensagem para a OpenAI
   const sendMessageToOpenAI = async () => {
     try {
       console.log(`Mensagem enviada para a OpenAI: ${chatPrompt}`);
@@ -154,9 +199,11 @@ function ImportFiles() {
     }
   };
 
+  // Lógica para manipular a seleção de coluna
   const handleColumnSelect = (e: ChangeEvent<HTMLSelectElement>) => {
     setSelectedColumn(e.target.value);
 
+    // Lógica para rolar até o final da página apenas em telas maiores que 768 pixels
     if (window.innerWidth > 768) {
       const dropdownScrollOptions = {
         top: document.getElementById("columnDropdown")?.offsetTop || 0,
@@ -166,18 +213,7 @@ function ImportFiles() {
     }
   };
 
-  const animateButton = async () => {
-    setIsLoading(true);
-
-    try {
-      await processarArquivo();
-    } catch (error) {
-      console.error("Erro durante o processamento do arquivo:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+  // Lógica para atualizar as colunas da folha
   const updateColumnsForSheet = async (sheetName: string | null) => {
     if (excelFile !== null && sheetName !== null) {
       setIsSheetLoading(true);
@@ -185,8 +221,8 @@ function ImportFiles() {
       try {
         const workbook = XLSX.read(excelFile, { type: "buffer" });
         const selectedWorksheet = workbook.Sheets[sheetName];
-        const data: object[] = XLSX.utils.sheet_to_json(selectedWorksheet);
-        const columns = Object.keys(data[0] as object);
+        const data = XLSX.utils.sheet_to_json(selectedWorksheet);
+        const columns = Object.keys(data[0]);
 
         setSelectedColumn(columns[0]);
         setSelectedSheetData(data);
@@ -201,16 +237,51 @@ function ImportFiles() {
 
   const handleFileSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    // Adiciona a classe de animação diretamente
+    const button = document.getElementById("importButton");
+    if (button) {
+      button.classList.add(
+        "h-12",
+        "w-12",
+        "border-l-gray-200",
+        "border-r-gray-200",
+        "border-b-gray-200",
+        "border-t-black-500",
+        "animate-spin",
+        "ease-linear",
+        "rounded-full"
+      );
+    }
+
     setIsLoading(true);
 
     try {
+      // Reinicia a barra de progresso antes do processamento
       setProgress(0);
       await processarArquivo();
+    } catch (error) {
+      console.error("Erro durante o processamento do arquivo:", error);
     } finally {
+      // Remove a classe de animação após o término do processamento
+      if (button) {
+        button.classList.remove(
+          "h-12",
+          "w-12",
+          "border-l-gray-200",
+          "border-r-gray-200",
+          "border-b-gray-200",
+          "border-t-black-500",
+          "animate-spin",
+          "ease-linear",
+          "rounded-full"
+        );
+      }
       setIsLoading(false);
     }
   };
 
+  // Renderização do componente
   return (
     <div className="wrapper p-8 bg-white">
       {isLoading && (
@@ -271,7 +342,7 @@ function ImportFiles() {
             <button
               type="submit"
               className="px-6 py-2 hover:bg-white hover:border-black hover:text-black hover:transition-colors bg-black text-white border border-transparent transition-border rounded-md md:w-40 md:flex-shrink-0 text-center"
-              onClick={animateButton}
+              onClick={handleFileSubmit} // Alterado para chamar handleFileSubmit
               id="importButton"
             >
               IMPORTAR
@@ -284,6 +355,8 @@ function ImportFiles() {
           </div>
         )}
       </form>
+
+      
 
       {totalRows && (
         <div className="mt-4">
@@ -329,10 +402,10 @@ function ImportFiles() {
                 id="columnDropdown"
                 name="column"
                 onChange={(e) => setSelectedColumn(e.target.value)}
-                value={selectedColumn}
+                value={selectedColumn || ""}
                 className="border rounded p-2 max-w-full"
               >
-                {Object.keys(selectedSheetData[0] || {}).map((key) => (
+                {Object.keys(selectedSheetData[0]).map((key) => (
                   <option key={key} value={key}>
                     {key}
                   </option>
@@ -350,7 +423,7 @@ function ImportFiles() {
                   </tr>
                 </thead>
                 <tbody>
-                  {excelData?.map((individualExcelData, index) => (
+                  {excelData.map((individualExcelData, index) => (
                     <tr key={index}>
                       <td className="border p-2">
                         {selectedColumn !== null
