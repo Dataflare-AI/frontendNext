@@ -185,8 +185,8 @@ function ImportFiles() {
       try {
         const workbook = XLSX.read(excelFile, { type: "buffer" });
         const selectedWorksheet = workbook.Sheets[sheetName];
-        const data = XLSX.utils.sheet_to_json(selectedWorksheet);
-        const columns = Object.keys(data[0]);
+        const data: object[] = XLSX.utils.sheet_to_json(selectedWorksheet);
+        const columns = Object.keys(data[0] as object);
 
         setSelectedColumn(columns[0]);
         setSelectedSheetData(data);
