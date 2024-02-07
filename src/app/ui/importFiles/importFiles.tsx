@@ -420,15 +420,16 @@ function ImportFiles() {
                   </tr>
                 </thead>
                 <tbody>
-                  {excelData.map((individualExcelData, index) => (
-                    <tr key={index}>
-                      <td className="border p-2">
-                        {selectedColumn !== null
-                          ? individualExcelData[selectedColumn]
-                          : ""}
-                      </td>
-                    </tr>
-                  ))}
+                  {excelData &&
+                    excelData.map((individualExcelData, index) => (
+                      <tr key={index}>
+                        <td className="border p-2">
+                          {selectedColumn !== null
+                            ? individualExcelData[selectedColumn]
+                            : ""}
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
