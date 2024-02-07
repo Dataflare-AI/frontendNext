@@ -30,6 +30,7 @@ function ImportFiles() {
   const [selectedColumn, setSelectedColumn] = useState<string>("");
   const [chatPrompt, setChatPrompt] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [selectedSheet, setSelectedSheet] = useState<string | null>(null); // Adicionando o estado selectedSheet
   const [selectedSheetData, setSelectedSheetData] = useState<ExcelRow[] | null>(
     null
   );
@@ -139,7 +140,7 @@ function ImportFiles() {
 
   const handleSheetSelect = (e: ChangeEvent<HTMLSelectElement>) => {
     const selectedSheetName = e.target.value;
-    setSelectedSheet(selectedSheetName);
+    setSelectedSheet(selectedSheetName); // Definindo o valor selecionado para selectedSheet
     setAreColumnsLoaded(false);
     updateColumnsForSheet(selectedSheetName);
   };
