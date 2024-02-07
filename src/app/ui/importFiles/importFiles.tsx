@@ -7,6 +7,10 @@ type ExcelDataItem = {
   [key: string]: any; // Aqui você pode ajustar as chaves e tipos conforme necessário
 };
 
+type ExcelRow = {
+  [key: string]: any;
+};
+
 const LoadingModal: React.FC<{ visible: boolean }> = ({ visible }) => {
   if (!visible) {
     return null;
@@ -26,11 +30,10 @@ function ImportFiles() {
   const [selectedColumn, setSelectedColumn] = useState<string>("");
   const [chatPrompt, setChatPrompt] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [selectedSheet, setSelectedSheet] = useState<string | null>(null);
+  const [selectedSheetData, setSelectedSheetData] = useState<ExcelRow[] | null>(
+    null
+  );
   const [sheetsList, setSheetsList] = useState<string[]>([]);
-  const [selectedSheetData, setSelectedSheetData] = useState<
-    ExcelDataItem[] | null
-  >(null);
   const [isSheetLoading, setIsSheetLoading] = useState<boolean>(false);
   const [areColumnsLoaded, setAreColumnsLoaded] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
@@ -65,8 +68,7 @@ function ImportFiles() {
 
         const selectedWorksheet =
           workbook.Sheets[selectedSheet || sheetNames[0]];
-        const data: ExcelDataItem[] =
-          XLSX.utils.sheet_to_json(selectedWorksheet);
+        const data: ExcelRow[] = XLSX.utils.sheet_to_json(selectedWorksheet);
 
         // Verifique se os dados são do tipo esperado antes de definir o estado
         if (
