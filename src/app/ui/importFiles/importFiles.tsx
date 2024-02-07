@@ -222,8 +222,7 @@ function ImportFiles() {
         const workbook = XLSX.read(excelFile, { type: "buffer" });
         const selectedWorksheet = workbook.Sheets[sheetName];
         const data = XLSX.utils.sheet_to_json(selectedWorksheet);
-        const columns = Object.keys(data[0]);
-
+        const columns = Object.keys(data[0] as ExcelDataItem);
         setSelectedColumn(columns[0]);
         setSelectedSheetData(data);
         setAreColumnsLoaded(true);
@@ -355,8 +354,6 @@ function ImportFiles() {
           </div>
         )}
       </form>
-
-      
 
       {totalRows && (
         <div className="mt-4">
