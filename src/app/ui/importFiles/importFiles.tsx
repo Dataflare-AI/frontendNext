@@ -12,6 +12,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
+import { DataTableDemo } from "@/app/ui/importFiles/table/table";
+
 type ExcelDataItem = Record<string, any>; // Ajuste o tipo conforme necessário
 
 const LoadingModal: React.FC<{ visible: boolean }> = ({ visible }) => {
@@ -28,8 +30,8 @@ const LoadingModal: React.FC<{ visible: boolean }> = ({ visible }) => {
 
 // Definição do componente
 function ImportFiles() {
-  // Estados necessários
   const [excelFile, setExcelFile] = useState<ArrayBuffer | null>(null);
+  const [fileName, setFileName] = useState<string | null>(null); // Novo estado para armazenar o nome do arquivo
   const [typeError, setTypeError] = useState<string | null>(null);
   const [excelData, setExcelData] = useState<any[] | null>(null);
   const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
@@ -45,6 +47,7 @@ function ImportFiles() {
   const [progress, setProgress] = useState<number>(0);
   const [totalRows, setTotalRows] = useState<number | null>(null);
   const [fileSize, setFileSize] = useState<number | null>(null);
+  const [selectedColumns, setSelectedColumns] = useState<string[]>([]);
 
   // Efeito para carregar os dados da folha quando a folha é selecionada
   useEffect(() => {
@@ -148,7 +151,6 @@ function ImportFiles() {
     await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulação de processamento
   };
 
-  // Lógica para manipular a seleção de arquivo
   const handleFile = async (e: ChangeEvent<HTMLInputElement>) => {
     try {
       let fileTypes = [
@@ -161,6 +163,7 @@ function ImportFiles() {
       if (selectedFile) {
         if (selectedFile && fileTypes.includes(selectedFile.type)) {
           setTypeError(null);
+          setFileName(selectedFile.name); // Atualiza o nome do arquivo quando um novo arquivo é carregado
           let reader = new FileReader();
           reader.readAsArrayBuffer(selectedFile);
 
@@ -201,7 +204,10 @@ function ImportFiles() {
 
   // Lógica para manipular a seleção de coluna
   const handleColumnSelect = (e: ChangeEvent<HTMLSelectElement>) => {
-    setSelectedColumn(e.target.value);
+    const selectedColumn = e.target.value;
+    if (!selectedColumns.includes(selectedColumn)) {
+      setSelectedColumns([...selectedColumns, selectedColumn]);
+    }
 
     // Lógica para rolar até o final da página apenas em telas maiores que 768 pixels
     if (window.innerWidth > 768) {
@@ -211,6 +217,10 @@ function ImportFiles() {
       };
       window.scrollTo(dropdownScrollOptions);
     }
+  };
+
+  const removeColumn = (column: string) => {
+    setSelectedColumns(selectedColumns.filter((col) => col !== column));
   };
 
   // Lógica para atualizar as colunas da folha
@@ -377,15 +387,19 @@ function ImportFiles() {
             <DialogHeader>
               <DialogTitle>Informações do Arquivo</DialogTitle>
               <DialogDescription>
-                {totalRows && (
-                  <div className="mt-4">
-                    <p className="">Linhas: {totalRows}</p>
+                {fileName && ( // Exibe o nome do arquivo
+                  <div className="mt-2">
+                    <p className="">Documento: {fileName}</p>
                   </div>
                 )}
-
                 {fileSize && (
                   <div className="mt-2">
                     <p className="">Tamanho: {fileSize}KB</p>
+                  </div>
+                )}
+                {totalRows && (
+                  <div className="mt-2">
+                    <p className="">Linhas: {totalRows}</p>
                   </div>
                 )}
               </DialogDescription>
@@ -398,71 +412,7 @@ function ImportFiles() {
         visible={(isLoading || isSheetLoading) && selectedSheet !== null}
       />
 
-      {progress === 100 && totalRows && (
-        <div className="mt-4">
-          <label htmlFor="sheetDropdown" className="text-lg">
-            Selecione uma página:
-          </label>
-          <select
-            id="sheetDropdown"
-            name="sheet"
-            onChange={handleSheetSelect}
-            value={selectedSheet || ""}
-            className="border rounded p-2 max-w-full"
-          >
-            {sheetsList.map((sheet) => (
-              <option key={sheet} value={sheet}>
-                {sheet}
-              </option>
-            ))}
-          </select>
-
-          {selectedSheetData && (
-            <div className="mt-4">
-              <label htmlFor="columnDropdown" className="text-lg">
-                Selecione uma coluna:
-              </label>
-              <select
-                id="columnDropdown"
-                name="column"
-                onChange={(e) => setSelectedColumn(e.target.value)}
-                value={selectedColumn || ""}
-                className="border rounded p-2 max-w-full"
-              >
-                {Object.keys(selectedSheetData[0]).map((key) => (
-                  <option key={key} value={key}>
-                    {key}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
-
-          <div className="viewer mt-4 overflow-x-auto">
-            <div className="table-responsive">
-              <table className="table border-collapse border w-full">
-                <thead className="bg-gray-200">
-                  <tr>
-                    <th className="border p-2">{selectedColumn}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {excelData &&
-                    excelData.map((individualExcelData, index) => (
-                      <tr key={index}>
-                        <td className="border p-2">
-                          {selectedColumn !== null
-                            ? individualExcelData[selectedColumn]
-                            : ""}
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      )}
+      <DataTableDemo />
 
       {selectedColumn && (
         <div className="mt-4">
