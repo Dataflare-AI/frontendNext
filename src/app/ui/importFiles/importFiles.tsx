@@ -412,6 +412,71 @@ function ImportFiles() {
         visible={(isLoading || isSheetLoading) && selectedSheet !== null}
       />
 
+      {progress === 100 && totalRows && (
+        <div className="mt-4">
+          <label htmlFor="sheetDropdown" className="text-lg">
+            Selecione uma página:
+          </label>
+          <select
+            id="sheetDropdown"
+            name="sheet"
+            onChange={handleSheetSelect}
+            value={selectedSheet || ""}
+            className="border rounded p-2 max-w-full"
+          >
+            {sheetsList.map((sheet) => (
+              <option key={sheet} value={sheet}>
+                {sheet}
+              </option>
+            ))}
+          </select>
+
+          {selectedSheetData && (
+            <div className="mt-4">
+              <label htmlFor="columnDropdown" className="text-lg">
+                Selecione uma coluna:
+              </label>
+              <select
+                id="columnDropdown"
+                name="column"
+                onChange={(e) => setSelectedColumn(e.target.value)}
+                value={selectedColumn || ""}
+                className="border rounded p-2 max-w-full"
+              >
+                {Object.keys(selectedSheetData[0]).map((key) => (
+                  <option key={key} value={key}>
+                    {key}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          <div className="viewer mt-4 overflow-x-auto">
+            <div className="table-responsive">
+              <table className="table border-collapse border w-full">
+                <thead className="bg-gray-200">
+                  <tr>
+                    <th className="border p-2">{selectedColumn}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {excelData &&
+                    excelData.map((individualExcelData, index) => (
+                      <tr key={index}>
+                        <td className="border p-2">
+                          {selectedColumn !== null
+                            ? individualExcelData[selectedColumn]
+                            : ""}
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
       <DataTableDemo />
 
       {selectedColumn && (
