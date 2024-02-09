@@ -314,6 +314,7 @@ function ImportFiles() {
       <h3 className="text-3xl font-bold mb-6">
         Importar & Visualizar Arquivos
       </h3>
+
       <form className="form-group custom-form mb-3" onSubmit={handleFileSubmit}>
         <div className="flex flex-col md:flex-row items-stretch">
           <input
@@ -477,7 +478,8 @@ function ImportFiles() {
           </div>
         </div>
       )}
-      <DataTableDemo />
+
+      {/* <DataTableDemo data={selectedSheetData || []} /> */}
 
       {selectedColumn && (
         <div className="mt-4">
