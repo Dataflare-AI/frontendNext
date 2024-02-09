@@ -77,25 +77,25 @@ export function DataTableDemo() {
     const reader = new FileReader();
 
     reader.onload = (evt) => {
-      const bstr = evt.target.result as string;
-      const wb = XLSX.read(bstr, { type: "binary" });
-      const wsname = wb.SheetNames[0];
-      const ws = wb.Sheets[wsname];
-      const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
+      if (evt.target) {
+        const bstr = evt.target.result as string;
+        const wb = XLSX.read(bstr, { type: "binary" });
+        const wsname = wb.SheetNames[0];
+        const ws = wb.Sheets[wsname];
+        const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
 
-      // Convertendo os dados do Excel para o formato desejado (Payment)
-      const excelData = data.slice(1).map((row: any) => ({
-        id: row[0],
-        amount: row[1],
-        status: row[2],
-        email: row[3],
-      }));
+        // Convertendo os dados do Excel para o formato desejado (Payment)
+        const excelData = data.slice(1).map((row: any) => ({
+          id: row[0],
+          amount: row[1],
+          status: row[2],
+          email: row[3],
+        }));
 
-      setExcelData(excelData);
-    };
-
-    reader.onerror = (evt) => {
-      console.error("Erro ao ler o arquivo:", evt.target.error);
+        setExcelData(excelData);
+      } else {
+        console.error("O evento não possui um alvo (target).");
+      }
     };
 
     reader.readAsBinaryString(file);
