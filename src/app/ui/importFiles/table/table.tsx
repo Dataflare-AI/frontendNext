@@ -64,7 +64,7 @@ export function DataTableDemo() {
   const [rowSelection, setRowSelection] = React.useState({});
   const [excelData, setExcelData] = React.useState<Payment[]>([]);
 
-  const handleExcelUpload = (e) => {
+  const handleExcelUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files[0];
 
     if (!file) {
@@ -75,14 +75,14 @@ export function DataTableDemo() {
     const reader = new FileReader();
 
     reader.onload = (evt) => {
-      const bstr = evt.target.result;
+      const bstr = evt.target.result as string;
       const wb = XLSX.read(bstr, { type: "binary" });
       const wsname = wb.SheetNames[0];
       const ws = wb.Sheets[wsname];
       const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
 
       // Convertendo os dados do Excel para o formato desejado (Payment)
-      const excelData = data.slice(1).map((row) => ({
+      const excelData = data.slice(1).map((row: any) => ({
         id: row[0],
         amount: row[1],
         status: row[2],
