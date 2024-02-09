@@ -65,12 +65,14 @@ export function DataTableDemo() {
   const [excelData, setExcelData] = React.useState<Payment[]>([]);
 
   const handleExcelUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files[0];
+    const files = e.target.files;
 
-    if (!file) {
+    if (!files || files.length === 0) {
       console.error("Nenhum arquivo selecionado.");
       return;
     }
+
+    const file = files[0];
 
     const reader = new FileReader();
 
