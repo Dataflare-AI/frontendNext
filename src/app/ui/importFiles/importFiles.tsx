@@ -1,6 +1,5 @@
 "use client";
 
-// Importações necessárias
 import React, { ChangeEvent, FormEvent, useState, useEffect } from "react";
 import * as XLSX from "xlsx";
 import {
@@ -12,7 +11,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-import { DataTableDemo } from "@/app/ui/importFiles/table/table";
+import { DataTable } from "@/app/ui/importFiles/table/table";
 
 type ExcelDataItem = Record<string, any>; // Ajuste o tipo conforme necessário
 
@@ -28,10 +27,9 @@ const LoadingModal: React.FC<{ visible: boolean }> = ({ visible }) => {
   );
 };
 
-// Definição do componente
 function ImportFiles() {
   const [excelFile, setExcelFile] = useState<ArrayBuffer | null>(null);
-  const [fileName, setFileName] = useState<string | null>(null); // Novo estado para armazenar o nome do arquivo
+  const [fileName, setFileName] = useState<string | null>(null);
   const [typeError, setTypeError] = useState<string | null>(null);
   const [excelData, setExcelData] = useState<any[] | null>(null);
   const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
@@ -66,7 +64,7 @@ function ImportFiles() {
     }
   }, [selectedSheet]);
 
-  const CHUNK_SIZE = 1000; // Tamanho do bloco para processamento
+  const CHUNK_SIZE = 1000;
 
   const processarArquivo = async () => {
     try {
@@ -111,11 +109,7 @@ function ImportFiles() {
           const end = Math.min(start + CHUNK_SIZE, totalRows);
           const chunk = data.slice(start, end);
 
-          // Processamento do bloco
           console.log(`Processando linhas de ${start + 1} a ${end}`);
-          // Aqui você pode realizar o processamento do bloco como desejar
-          // Por exemplo, enviar o bloco para a OpenAI aqui
-          // Ou realizar qualquer outra operação desejada
           await processarBloco(chunk);
 
           processedRows += chunk.length;
@@ -130,12 +124,10 @@ function ImportFiles() {
         const timePer100KB = (processingTime / fileSizeAsNumber) * 100;
         const estimatedTime = timePer100KB * 100; // Tempo estimado para processar o arquivo inteiro
 
-        // Agora você pode utilizar o tempo estimado para exibir uma barra de progresso ou outra indicação visual do progresso
         console.log(
           `Tempo estimado de processamento: ${estimatedTime} milissegundos`
         );
 
-        // Garante que a barra de progresso atinge exatamente 100%
         setProgress(100);
       }
     } catch (error) {
@@ -143,12 +135,8 @@ function ImportFiles() {
     }
   };
 
-  // Função para processar um bloco de dados
   const processarBloco = async (blockData: any[]) => {
-    // Implemente o processamento do bloco conforme necessário
-    // Por exemplo, você pode enviar esse bloco para a OpenAI aqui
-    // Ou realizar qualquer outra operação desejada
-    await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulação de processamento
+    await new Promise((resolve) => setTimeout(resolve, 1000));
   };
 
   const handleFile = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -163,7 +151,7 @@ function ImportFiles() {
       if (selectedFile) {
         if (selectedFile && fileTypes.includes(selectedFile.type)) {
           setTypeError(null);
-          setFileName(selectedFile.name); // Atualiza o nome do arquivo quando um novo arquivo é carregado
+          setFileName(selectedFile.name);
           let reader = new FileReader();
           reader.readAsArrayBuffer(selectedFile);
 
@@ -192,16 +180,6 @@ function ImportFiles() {
     updateColumnsForSheet(selectedSheetName);
   };
 
-  // Lógica para enviar mensagem para a OpenAI
-  const sendMessageToOpenAI = async () => {
-    try {
-      console.log(`Mensagem enviada para a OpenAI: ${chatPrompt}`);
-      // Lógica de envio para a OpenAI aqui
-    } catch (error) {
-      console.error("Erro durante o envio da mensagem:", error);
-    }
-  };
-
   // Lógica para manipular a seleção de coluna
   const handleColumnSelect = (e: ChangeEvent<HTMLSelectElement>) => {
     const selectedColumn = e.target.value;
@@ -217,10 +195,6 @@ function ImportFiles() {
       };
       window.scrollTo(dropdownScrollOptions);
     }
-  };
-
-  const removeColumn = (column: string) => {
-    setSelectedColumns(selectedColumns.filter((col) => col !== column));
   };
 
   // Lógica para atualizar as colunas da folha
@@ -290,7 +264,6 @@ function ImportFiles() {
     }
   };
 
-  // Renderização do componente
   return (
     <div className="wrapper p-8 bg-white">
       {isLoading && (
@@ -315,57 +288,6 @@ function ImportFiles() {
         Importar & Visualizar Arquivos
       </h3>
 
-      <form className="form-group custom-form mb-3" onSubmit={handleFileSubmit}>
-        <div className="flex flex-col md:flex-row items-stretch">
-          <input
-            type="file"
-            className="form-control border rounded p-2 flex-grow mb-2 md:mb-0 md:mr-2"
-            required
-            onChange={handleFile}
-          />
-          {isLoading ? (
-            <button
-              type="button"
-              disabled
-              className="py-2.5 px-5 me-2 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-black-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-black-700 focus:text-black-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 inline-flex items-center"
-            >
-              <svg
-                aria-hidden="true"
-                role="status"
-                className="inline w-4 h-4 me-3 text-gray-200 animate-spin dark:text-gray-600"
-                viewBox="0 0 100 101"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                  fill="currentColor"
-                />
-                <path
-                  d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                  fill="#000000"
-                />
-              </svg>
-              IMPORTANDO...
-            </button>
-          ) : (
-            <button
-              type="submit"
-              className="px-6 py-2 hover:bg-white hover:border-black hover:text-black hover:transition-colors bg-black text-white border border-transparent transition-border rounded-md md:w-40 md:flex-shrink-0 text-center"
-              onClick={handleFileSubmit} // Alterado para chamar handleFileSubmit
-              id="importButton"
-            >
-              IMPORTAR
-            </button>
-          )}
-        </div>
-        {typeError && (
-          <div className="alert alert-danger mt-2" role="alert">
-            {typeError}
-          </div>
-        )}
-      </form>
-
       {excelFile && (
         <Dialog>
           <DialogTrigger>
@@ -388,7 +310,7 @@ function ImportFiles() {
             <DialogHeader>
               <DialogTitle>Informações do Arquivo</DialogTitle>
               <DialogDescription>
-                {fileName && ( // Exibe o nome do arquivo
+                {fileName && (
                   <div className="mt-2">
                     <p className="">Documento: {fileName}</p>
                   </div>
@@ -479,30 +401,7 @@ function ImportFiles() {
         </div>
       )}
 
-      {/* <DataTableDemo data={selectedSheetData || []} /> */}
-
-      {selectedColumn && (
-        <div className="mt-4">
-          <label htmlFor="chatPrompt" className="text-lg mr-2">
-            Prompt do Chat:
-          </label>
-          <textarea
-            id="chatPrompt"
-            placeholder={`Digite sua mensagem relacionada a ${selectedColumn}`}
-            className="border rounded p-2 my-2 w-full"
-            value={chatPrompt}
-            onChange={(e) => setChatPrompt(e.target.value)}
-            rows={6}
-          />
-          <button
-            type="button"
-            className="hover:bg-black hover:border-black hover:text-white bg-white text-black border border-black transition-all rounded-md text-center px-4 py-2"
-            onClick={sendMessageToOpenAI}
-          >
-            Enviar Mensagem
-          </button>
-        </div>
-      )}
+      <DataTable />
     </div>
   );
 }

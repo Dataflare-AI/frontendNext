@@ -18,13 +18,13 @@ import { FaFileExcel } from "react-icons/fa";
 
 const menuItems = [
   {
-    title: "Paginas",
+    // title: "Paginas",
     list: [
-      {
-        title: "Home",
-        path: "/dashboard",
-        icon: <MdDashboard />,
-      },
+      // {
+      //   title: "Home",
+      //   path: "/dashboard",
+      //   icon: <MdDashboard />,
+      // },
       // {
       //   title: "Usuários",
       //   path: "/dashboard/users",
@@ -43,7 +43,7 @@ const menuItems = [
     ],
   },
   {
-    title: "Análise",
+    // title: "Análise",
     list: [
       {
         title: "Importação",
@@ -62,21 +62,21 @@ const menuItems = [
       // },
     ],
   },
-  {
-    title: "Usuário",
-    list: [
-      {
-        title: "Configurações",
-        path: "/dashboard/settings",
-        icon: <MdOutlineSettings />,
-      },
-      {
-        title: "Ajuda",
-        path: "/dashboard/help",
-        icon: <MdHelpCenter />,
-      },
-    ],
-  },
+  // {
+  //   title: "Usuário",
+  //   list: [
+  //     {
+  //       title: "Configurações",
+  //       path: "/dashboard/settings",
+  //       icon: <MdOutlineSettings />,
+  //     },
+  //     {
+  //       title: "Ajuda",
+  //       path: "/dashboard/help",
+  //       icon: <MdHelpCenter />,
+  //     },
+  //   ],
+  // },
 ];
 
 export default function Sidebar() {
@@ -87,16 +87,16 @@ export default function Sidebar() {
           // className={styles.userImage}
           src={"/noavatar.png"}
           alt=""
-          width="50"
-          height="50"
+          width="30"
+          height="30"
         />
         <div className={styles.userDetail}>
           <span className={styles.userTitle}>Administrator</span>
         </div>
       </div>
       <ul className={styles.list}>
-        {menuItems.map((cat) => (
-          <li key={cat.title}>
+        {menuItems.map((cat, index) => (
+          <li key={index} className={index === 1 ? styles.centerItem : ""}>
             <span className={styles.cat}>{cat.title}</span>
             {cat.list.map((item) => (
               <MenuLink item={item} key={item.title} />
