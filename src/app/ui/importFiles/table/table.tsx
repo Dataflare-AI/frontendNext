@@ -30,7 +30,7 @@ export function DataTable() {
     }
   };
 
-  const handleExcelUpload = (e) => {
+  const handleExcelUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
 
     if (!files || files.length === 0) {
