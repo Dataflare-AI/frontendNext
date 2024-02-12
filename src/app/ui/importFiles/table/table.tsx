@@ -23,6 +23,7 @@ export function DataTable() {
   const [excelFile, setExcelFile] = useState<ArrayBuffer | null>(null);
   const fileInputRef = useRef(null); // Referência para o input de arquivo
   const [isSheetLoading, setIsSheetLoading] = useState<boolean>(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const LoadingModal: React.FC<{ visible: boolean }> = ({ visible }) => {
     if (!visible) {
