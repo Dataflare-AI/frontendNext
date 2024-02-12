@@ -97,7 +97,7 @@ export default function Sidebar() {
       <ul className={styles.list}>
         {menuItems.map((cat, index) => (
           <li key={index} className={index === 1 ? styles.centerItem : ""}>
-            <span className={styles.cat}>{cat.title}</span>
+            <span className={styles.cat}></span>
             {cat.list.map((item) => (
               <MenuLink item={item} key={item.title} />
             ))}
