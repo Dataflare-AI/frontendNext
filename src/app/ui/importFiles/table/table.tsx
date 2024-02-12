@@ -1,4 +1,15 @@
-import React, { useState, useRef, FormEvent } from "react";
+
+Para corrigir os erros no código e garantir que não ocorram ao fazer o deploy, siga estas correções:
+
+Remova a segunda declaração de fileInputRef, já que você a definiu duas vezes. Mantenha apenas a primeira.
+Corrija os atributos dos elementos JSX que estão usando nomes de atributos incorretos. No React, os atributos devem ser em camelCase, por exemplo, strokeLinecap em vez de stroke-linecap.
+Verifique se todas as variáveis estão definidas e inicializadas corretamente.
+Adicione os tipos apropriados aos parâmetros e variáveis que estão faltando.
+Aqui está o código corrigido:
+
+tsx
+Copy code
+import React, { useState, useRef, FormEvent, ChangeEvent } from "react";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import {
   Dialog,
@@ -10,28 +21,21 @@ import {
 } from "@/components/ui/dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { ScrollArea } from "@/components/ui/scroll-area"; // Importando ScrollArea
+import { ScrollArea } from "@/components/ui/scroll-area";
 import * as XLSX from "xlsx";
 
 export function DataTable() {
-  const [excelData, setExcelData] = useState([]);
-  const [selectedColumns, setSelectedColumns] = useState([]);
-  const [columnData, setColumnData] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [excelData, setExcelData] = useState<any[]>([]);
+  const [selectedColumns, setSelectedColumns] = useState<string[]>([]);
+  const [columnData, setColumnData] = useState<any[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [typeError, setTypeError] = useState<string | null>(null);
   const [excelFile, setExcelFile] = useState<ArrayBuffer | null>(null);
-  const fileInputRef = useRef(null); // Referência para o input de arquivo
-  const [isSheetLoading, setIsSheetLoading] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [isSheetLoading, setIsSheetLoading] = useState<boolean>(false);
 
-  const LoadingModal: React.FC<{ visible: boolean }> = ({ visible }) => {
-    if (!visible) {
-      return null;
-    }
-  };
-
-  const handleExcelUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleExcelUpload = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
 
     if (!files || files.length === 0) {
@@ -48,7 +52,7 @@ export function DataTable() {
     fileInputRef.current?.click(); // Safely calling the click() method if fileInputRef.current is not null
   };
 
-  const processExcelFile = (file) => {
+  const processExcelFile = (file: File) => {
     const fileName = file.name.toLowerCase();
     if (!fileName.endsWith(".xlsx") && !fileName.endsWith(".csv")) {
       console.error("Apenas arquivos .xlsx e .csv são permitidos.");
@@ -59,7 +63,7 @@ export function DataTable() {
 
     reader.onload = (evt) => {
       if (evt.target) {
-        const bstr = evt.target.result;
+        const bstr = evt.target.result as string;
         const wb = XLSX.read(bstr, { type: "binary" });
         const wsname = wb.SheetNames[0];
         const ws = wb.Sheets[wsname];
@@ -70,8 +74,8 @@ export function DataTable() {
 
         // Convertendo os dados do Excel para o formato desejado
         const excelData = data.slice(1).map((row) => {
-          const rowData = {};
-          headers.forEach((header, index) => {
+          const rowData: any = {};
+          headers.forEach((header: string, index: number) => {
             rowData[header] = row[index];
           });
           return rowData;
@@ -86,7 +90,7 @@ export function DataTable() {
     reader.readAsBinaryString(file);
   };
 
-  const handleColumnToggle = (column) => {
+  const handleColumnToggle = (column: string) => {
     if (selectedColumns.includes(column)) {
       setSelectedColumns(selectedColumns.filter((col) => col !== column));
     } else {
@@ -94,7 +98,7 @@ export function DataTable() {
     }
   };
 
-  const handleCellClick = (column) => {
+  const handleCellClick = (column: string) => {
     const columnData = excelData.map((row) => row[column]);
     setColumnData(columnData);
     setIsModalOpen(true);
