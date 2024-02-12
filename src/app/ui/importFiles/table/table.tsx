@@ -44,7 +44,7 @@ export function DataTable() {
 
   const handleFileSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    fileInputRef.current.click(); // Chamando o método click() do input de arquivo
+    fileInputRef.current?.click(); // Safely calling the click() method if fileInputRef.current is not null
   };
 
   const processExcelFile = (file) => {
