@@ -1,14 +1,3 @@
-
-Para corrigir os erros no código e garantir que não ocorram ao fazer o deploy, siga estas correções:
-
-Remova a segunda declaração de fileInputRef, já que você a definiu duas vezes. Mantenha apenas a primeira.
-Corrija os atributos dos elementos JSX que estão usando nomes de atributos incorretos. No React, os atributos devem ser em camelCase, por exemplo, strokeLinecap em vez de stroke-linecap.
-Verifique se todas as variáveis estão definidas e inicializadas corretamente.
-Adicione os tipos apropriados aos parâmetros e variáveis que estão faltando.
-Aqui está o código corrigido:
-
-tsx
-Copy code
 import React, { useState, useRef, FormEvent, ChangeEvent } from "react";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import {
