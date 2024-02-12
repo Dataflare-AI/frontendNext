@@ -17,11 +17,10 @@ export function DataTable() {
   const [excelData, setExcelData] = useState<any[]>([]);
   const [selectedColumns, setSelectedColumns] = useState<string[]>([]);
   const [columnData, setColumnData] = useState<any[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [typeError, setTypeError] = useState<string | null>(null);
-  const [excelFile, setExcelFile] = useState<ArrayBuffer | null>(null);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [isSheetLoading, setIsSheetLoading] = useState<boolean>(false);
 
   const handleExcelUpload = (e: ChangeEvent<HTMLInputElement>) => {
@@ -38,7 +37,7 @@ export function DataTable() {
 
   const handleFileSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    fileInputRef.current?.click(); // Safely calling the click() method if fileInputRef.current is not null
+    fileInputRef.current?.click();
   };
 
   const processExcelFile = (file: File) => {
@@ -58,13 +57,11 @@ export function DataTable() {
         const ws = wb.Sheets[wsname];
         const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
 
-        // Extrair os cabeçalhos das colunas
         const headers = data[0];
 
-        // Convertendo os dados do Excel para o formato desejado
         const excelData = data.slice(1).map((row) => {
-          const rowData: any = {};
-          headers.forEach((header: string, index: number) => {
+          const rowData: { [key: string]: any } = {};
+          headers.forEach((header, index) => {
             rowData[header] = row[index];
           });
           return rowData;
@@ -113,33 +110,32 @@ export function DataTable() {
           </div>
         </div>
       )}
-      <div className=" flex-col md:flex-row items-stretch">
-        <div class="flex items-center justify-center w-full">
+      <div className="flex-col md:flex-row items-stretch">
+        <div className="flex items-center justify-center w-full">
           <label
-            for="dropzone-file"
-            class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+            htmlFor="dropzone-file"
+            className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
           >
-            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+            <div className="flex flex-col items-center justify-center pt-5 pb-6">
               <svg
-                class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 20 16"
               >
                 <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
                   d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
                 />
               </svg>
-              <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                <span class="font-semibold">Clique para upload</span> ou arraste
-                aqui
+              <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                <span className="font-semibold">Clique para upload</span> ou
+                arraste aqui
               </p>
-              <p class="text-xs text-gray-500 dark:text-gray-400">
+              <p className="text-xs text-gray-500 dark:text-gray-400">
                 XSLX and CSV
               </p>
             </div>
@@ -147,7 +143,8 @@ export function DataTable() {
               id="dropzone-file"
               type="file"
               accept=".xlsx,.csv"
-              class="hidden"
+              className="hidden"
+              onChange={handleExcelUpload}
             />
           </label>
         </div>
@@ -155,7 +152,7 @@ export function DataTable() {
           type="file"
           ref={fileInputRef}
           onChange={handleExcelUpload}
-          style={{ display: "none" }} // Estilo para ocultar o input de arquivo
+          style={{ display: "none" }}
         />
         {isLoading ? (
           <button
@@ -210,8 +207,8 @@ export function DataTable() {
               className="w-6 h-6"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"
               />
             </svg>
@@ -241,13 +238,9 @@ export function DataTable() {
         </Dialog>
       )}
 
-      <LoadingModal
-        visible={(isLoading || isSheetLoading) && selectedSheet !== null}
-      />
       <div className="rounded-md border">
         <Table>
           <TableBody>
-            {/* Linhas da tabela (apenas uma célula por linha, representando a coluna) */}
             {excelData.length > 0 &&
               Object.keys(excelData[0]).map((header, index) => (
                 <TableRow key={index}>
@@ -273,8 +266,8 @@ export function DataTable() {
                           className="w-6 h-6"
                         >
                           <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                             d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"
                           />
                         </svg>
@@ -288,7 +281,6 @@ export function DataTable() {
       </div>
       <Dialog open={isModalOpen}>
         <DialogContent>
-          {/* Usando o ScrollArea para adicionar scroll às linhas da coluna */}
           <ScrollArea className="h-60">
             {columnData.map((data, index) => (
               <p key={index}>{data}</p>
