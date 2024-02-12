@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, FormEvent } from "react";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import {
   Dialog,
