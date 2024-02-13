@@ -57,17 +57,24 @@ export function DataTable() {
         const ws = wb.Sheets[wsname];
         const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
 
-        const headers = data[0];
+        const headers = data[0] as string[]; // Adicionando uma verificação de tipo
 
-        const excelData = data.slice(1).map((row) => {
-          const rowData: { [key: string]: any } = {};
-          headers.forEach((header, index) => {
-            rowData[header] = row[index];
+        // Verificando se headers é realmente um array de strings
+        if (
+          Array.isArray(headers) &&
+          headers.every((header) => typeof header === "string")
+        ) {
+          const excelData = data.slice(1).map((row) => {
+            const rowData: { [key: string]: any } = {};
+            headers.forEach((header, index) => {
+              rowData[header] = row[index];
+            });
+            return rowData;
           });
-          return rowData;
-        });
-
-        setExcelData(excelData);
+          setExcelData(excelData);
+        } else {
+          console.error("Os cabeçalhos das colunas não são válidos.");
+        }
       } else {
         console.error("O evento não possui um alvo (target).");
       }
