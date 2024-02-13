@@ -22,6 +22,7 @@ export function DataTable() {
   const [typeError, setTypeError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isSheetLoading, setIsSheetLoading] = useState<boolean>(false);
+  const [progress, setProgress] = useState<number>(0);
 
   const handleExcelUpload = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -105,6 +106,10 @@ export function DataTable() {
     const columnData = excelData.map((row) => row[column]);
     setColumnData(columnData);
     setIsModalOpen(true);
+  };
+
+  const updateProgress = (currentProgress: number) => {
+    setProgress(currentProgress);
   };
 
   return (
