@@ -24,6 +24,8 @@ export function DataTable() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isSheetLoading, setIsSheetLoading] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
+  const [fileName, setFileName] = useState<string | null>(null);
+  const [fileSize, setFileSize] = useState<number | null>(null);
 
   const handleExcelUpload = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -58,11 +60,10 @@ export function DataTable() {
         const wb = XLSX.read(bstr, { type: "binary" });
         const wsname = wb.SheetNames[0];
         const ws = wb.Sheets[wsname];
-        const data: string[][] = XLSX.utils.sheet_to_json(ws, {
-          header: 1,
-        }) as string[][];
+        const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
 
-        const headers: string[] = data[0];
+        const headers = data[0];
+
         const excelData = data.slice(1).map((row) => {
           const rowData: { [key: string]: any } = {};
           headers.forEach((header, index) => {
@@ -72,6 +73,8 @@ export function DataTable() {
         });
 
         setExcelData(excelData);
+        setFileName(file.name);
+        setFileSize(file.size);
       } else {
         console.error("O evento não possui um alvo (target).");
       }
