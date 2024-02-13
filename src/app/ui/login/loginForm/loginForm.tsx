@@ -128,7 +128,7 @@ export default function LoginForm() {
                       email,
                       password,
                       redirect: true,
-                      callbackUrl: "/dashboard",
+                      callbackUrl: "/",
                     })
                   }
                   disabled={!email || !password}

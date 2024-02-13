@@ -1,8 +1,7 @@
-import NextAuth from "next-auth";
+import NextAuth, { AuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import { NextApiHandler } from "next";
 
-export const authOptions = {
+export const authOptions: AuthOptions = {
   // Configure one or more authentication providers
   providers: [
     GoogleProvider({
@@ -13,9 +12,10 @@ export const authOptions = {
   pages: {
     signIn: "/login",
   },
+  callbacks: {},
 };
 
-const authHandler: NextApiHandler = (req, res) =>
-  NextAuth(req, res, authOptions);
-
-export default authHandler;
+const authHandler = NextAuth(authOptions);
+export default async function handler(...params: any[]) {
+  await authHandler(...params);
+}
