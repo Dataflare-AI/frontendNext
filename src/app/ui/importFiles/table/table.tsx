@@ -23,6 +23,7 @@ export function DataTable() {
   const [excelFile, setExcelFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isSheetLoading, setIsSheetLoading] = useState<boolean>(false);
+  const [progress, setProgress] = useState<number>(0);
 
   const handleExcelUpload = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
