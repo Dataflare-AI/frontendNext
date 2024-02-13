@@ -57,14 +57,14 @@ export function DataTable() {
         const ws = wb.Sheets[wsname];
         const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
 
-        const headers = data[0] as string[]; // Adicionando uma verificação de tipo
+        const headers = data[0] as string[];
 
-        // Verificando se headers é realmente um array de strings
         if (
           Array.isArray(headers) &&
           headers.every((header) => typeof header === "string")
         ) {
-          const excelData = data.slice(1).map((row) => {
+          const excelData = data.slice(1).map((row: string[]) => {
+            // Adicionando tipagem explícita para 'row'
             const rowData: { [key: string]: any } = {};
             headers.forEach((header, index) => {
               rowData[header] = row[index];
@@ -82,7 +82,6 @@ export function DataTable() {
 
     reader.readAsBinaryString(file);
   };
-
   const handleColumnToggle = (column: string) => {
     if (selectedColumns.includes(column)) {
       setSelectedColumns(selectedColumns.filter((col) => col !== column));
