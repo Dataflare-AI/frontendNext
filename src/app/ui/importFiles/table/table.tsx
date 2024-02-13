@@ -26,6 +26,7 @@ export function DataTable() {
   const [progress, setProgress] = useState<number>(0);
   const [fileName, setFileName] = useState<string | null>(null);
   const [fileSize, setFileSize] = useState<number | null>(null);
+  const totalRows = excelData.length;
 
   const handleExcelUpload = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
