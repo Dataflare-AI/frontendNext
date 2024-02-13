@@ -69,9 +69,10 @@ const Navbar = () => {
           <button
             onClick={toggleMobileMenu}
             aria-label="Toggle Menu"
-            className="px-2 py-1 ml-auto text-gray-500 rounded-md lg:hidden hover:text-gray-500 focus:text-gray-500 focus:bg-indigo-100 focus:outline-none dark:text-gray-300 dark:focus:bg-trueGray-700"
+            className="flex items-center px-2 py-1 ml-auto text-gray-500 rounded-md lg:hidden hover:text-gray-500 focus:text-gray-500 focus:bg-indigo-100 focus:outline-none dark:text-gray-300 dark:focus:bg-trueGray-700"
             role="button"
           >
+            <ModeToggle />
             {isMobileMenuOpen ? (
               <svg
                 className="w-6 h-6 fill-current"
