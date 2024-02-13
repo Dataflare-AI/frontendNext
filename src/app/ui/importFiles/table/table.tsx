@@ -65,14 +65,22 @@ export function DataTable() {
         ) {
           const excelData = data
             .slice(1)
-            .map((row: string[], index: number, array: string[][]) => {
-              // Adicionando os três parâmetros esperados pela função map
-              const rowData: { [key: string]: any } = {};
-              headers.forEach((header, index) => {
-                rowData[header] = row[index];
-              });
-              return rowData;
-            });
+            .map((row) => {
+              if (
+                Array.isArray(row) &&
+                row.every((value) => typeof value === "string")
+              ) {
+                const rowData: { [key: string]: any } = {};
+                headers.forEach((header, index) => {
+                  rowData[header] = row[index];
+                });
+                return rowData;
+              } else {
+                console.error("Os dados da linha não são válidos.");
+                return null;
+              }
+            })
+            .filter(Boolean);
           setExcelData(excelData);
         } else {
           console.error("Os cabeçalhos das colunas não são válidos.");
