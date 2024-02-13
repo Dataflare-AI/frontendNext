@@ -57,7 +57,9 @@ export function DataTable() {
         const wb = XLSX.read(bstr, { type: "binary" });
         const wsname = wb.SheetNames[0];
         const ws = wb.Sheets[wsname];
-        const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
+        const data: string[][] = XLSX.utils.sheet_to_json(ws, {
+          header: 1,
+        }) as string[][];
 
         const headers: string[] = data[0];
         const excelData = data.slice(1).map((row) => {
