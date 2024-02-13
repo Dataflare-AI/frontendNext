@@ -20,9 +20,9 @@ export function DataTable() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [typeError, setTypeError] = useState<string | null>(null);
+  const [excelFile, setExcelFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isSheetLoading, setIsSheetLoading] = useState<boolean>(false);
-  const [progress, setProgress] = useState<number>(0);
 
   const handleExcelUpload = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -33,6 +33,7 @@ export function DataTable() {
     }
 
     const file = files[0];
+    setExcelFile(file); // Definindo o arquivo selecionado no estado excelFile
     processExcelFile(file);
   };
 
@@ -58,34 +59,17 @@ export function DataTable() {
         const ws = wb.Sheets[wsname];
         const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
 
-        const headers = data[0] as string[];
+        const headers = data[0];
 
-        if (
-          Array.isArray(headers) &&
-          headers.every((header) => typeof header === "string")
-        ) {
-          const excelData = data
-            .slice(1)
-            .map((row) => {
-              if (
-                Array.isArray(row) &&
-                row.every((value) => typeof value === "string")
-              ) {
-                const rowData: { [key: string]: any } = {};
-                headers.forEach((header, index) => {
-                  rowData[header] = row[index];
-                });
-                return rowData;
-              } else {
-                console.error("Os dados da linha não são válidos.");
-                return null;
-              }
-            })
-            .filter(Boolean);
-          setExcelData(excelData);
-        } else {
-          console.error("Os cabeçalhos das colunas não são válidos.");
-        }
+        const excelData = data.slice(1).map((row) => {
+          const rowData: { [key: string]: any } = {};
+          headers.forEach((header, index) => {
+            rowData[header] = row[index];
+          });
+          return rowData;
+        });
+
+        setExcelData(excelData);
       } else {
         console.error("O evento não possui um alvo (target).");
       }
