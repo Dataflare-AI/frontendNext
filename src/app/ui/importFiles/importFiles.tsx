@@ -265,7 +265,7 @@ function ImportFiles() {
   };
 
   return (
-    <div className="wrapper p-8 bg-white">
+    <div className="wrapper p-8">
       {isLoading && (
         <div className="relative pt-1">
           <div className="flex mb-2 items-center justify-between">

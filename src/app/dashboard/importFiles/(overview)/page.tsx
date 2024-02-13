@@ -1,12 +1,9 @@
 import ImportFiles from "@/app/ui/importFiles/importFiles";
-import { ThemeProvider } from "@/app/context/ThemeProvider";
 
-export default function LoginPage() {
+export default function ImportPage() {
   return (
-    <main className="bg-white min-h-full">
-      <ThemeProvider>
-        <ImportFiles />
-      </ThemeProvider>
+    <main className="min-h-full">
+      <ImportFiles />
     </main>
   );
 }

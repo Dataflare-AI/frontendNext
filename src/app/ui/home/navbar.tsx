@@ -3,7 +3,42 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { openSans } from "@/app/ui/fonts";
-// import ThemeChanger from "./DarkSwitch";
+import { Moon, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+export function ModeToggle() {
+  const { setTheme } = useTheme();
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" size="icon">
+          <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+          <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          <span className="sr-only">Toggle theme</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={() => setTheme("light")}>
+          Claro
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("dark")}>
+          Escuro
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("system")}>
+          Sistema
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
 
 const Navbar = () => {
   const navigation = ["Produtos", "Segmentos", "Sobre", "Assinatura"];
@@ -16,7 +51,7 @@ const Navbar = () => {
   const menuItemClass = `${openSans.className}px-4 py-2 text-lg font-normal no-underline rounded-md dark:text-gray-200 hover:text-black focus:bg-indigo-100 focus:outline-none dark:focus:bg-gray-800`;
 
   return (
-    <header className="w-full bg-white">
+    <header className="w-full">
       <nav className="container relative flex flex-wrap items-center justify-between mx-auto lg:justify-between xl:px-0">
         {/* Logo  */}
         <div className="px-4 flex items-center justify-between w-full lg:w-auto">
@@ -108,7 +143,7 @@ const Navbar = () => {
             Entrar
           </Link>
 
-          {/* <ThemeChanger /> */}
+          <ModeToggle />
         </div>
       </nav>
     </header>

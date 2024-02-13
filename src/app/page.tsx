@@ -15,7 +15,7 @@ import "src/app/globals.css";
 
 export default function Home() {
   return (
-    <div className="app-container bg-white">
+    <div className="app-container">
       <Navbar />
       <Hero />
       <SectionTitle pretitle="Vantagens" title="Potencialize Seus Resultados!">

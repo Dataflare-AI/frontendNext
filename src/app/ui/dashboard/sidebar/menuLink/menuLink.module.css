@@ -9,5 +9,5 @@
 
 .container:hover,
 .active {
-    background-color: #dfdfdf;
+    /* background-color: #dfdfdf; */
 }

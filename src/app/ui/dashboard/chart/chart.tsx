@@ -67,7 +67,7 @@ const Chart = () => {
         >
           <XAxis dataKey="name" />
           <YAxis />
-          <Tooltip contentStyle={{ background: "#dfdfdf", border: "none" }} />
+          <Tooltip contentStyle={{ border: "none" }} />
           <Legend />
           <Line
             type="monotone"

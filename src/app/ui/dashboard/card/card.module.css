@@ -8,9 +8,9 @@
     width: 100%;
 }
 
-.container:hover {
+/* .container:hover {
     background-color: #dfdfdf;
-}
+} */
 
 .texts {
     display: flex;

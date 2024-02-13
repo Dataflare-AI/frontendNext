@@ -15,7 +15,7 @@ interface AvaliacaoAvatarProps {
 const Testimonials = () => {
   return (
     <Container>
-      <div className="grid gap-10 lg:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-10 lg:grid-cols-2 xl:grid-cols-3 mx-5">
         <div className="lg:col-span-2 xl:col-auto">
           <div className="flex flex-col justify-between w-full h-full bg-gray-100 px-14 rounded-2xl py-14 dark:bg-trueGray-800">
             <p className="text-2xl leading-normal text-gray-800 ">
@@ -68,8 +68,10 @@ function AvaliacaoAvatar(props: AvaliacaoAvatarProps) {
         <Image src={props.image} width="40" height="40" alt="Avatar" />
       </div>
       <div>
-        <div className="text-lg font-medium">{props.name}</div>
-        <div className="text-gray-600 dark:text-gray-400">{props.title}</div>
+        <div className="text-lg font-medium text-gray-800 dark:text-gray-800">
+          {props.name}
+        </div>
+        <div className="text-gray-800 dark:text-gray-800">{props.title}</div>
       </div>
     </div>
   );

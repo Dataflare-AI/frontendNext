@@ -19,7 +19,7 @@ const Faq = () => {
           <div key={item.question} className="mb-5">
             <button
               onClick={() => handleToggle(index)}
-              className="flex items-center justify-between w-full px-4 py-4 text-lg text-left text-gray-800 rounded-lg bg-gray-50 hover:bg-gray-100 focus:outline-none focus-visible:ring focus-visible:ring-gray-100 focus-visible:ring-opacity-75 dark:bg-trueGray-800 dark:text-gray-200"
+              className="flex items-center justify-between w-full px-4 py-4 text-lg text-left text-gray-800 rounded-lg   focus:outline-none focus-visible:ring focus-visible:ring-gray-100 focus-visible:ring-opacity-75 dark:bg-trueGray-800 dark:text-gray-200"
             >
               <span>{item.question}</span>
               {/* Use seu ícone desejado aqui, substituindo ChevronUpIcon */}

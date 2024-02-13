@@ -4,12 +4,12 @@ import Container from "./container";
 const Cta = () => {
   return (
     <Container>
-      <div className="flex flex-wrap items-center justify-between w-full max-w-4xl gap-5 mx-auto text-white bg-black px-7 py-7 lg:px-12 lg:py-12 lg:flex-nowrap rounded-xl">
+      <div className="flex flex-wrap items-center justify-between w-full max-w-4xl gap-5 mx-auto  px-7 py-7 lg:px-12 lg:py-12 lg:flex-nowrap rounded-xl">
         <div className="flex-grow text-center lg:text-left">
           <h2 className="text-2xl font-medium lg:text-3xl">
             Pronto para experimentar este produto?
           </h2>
-          <p className="mt-2 font-medium text-white text-opacity-90 lg:text-xl">
+          <p className="mt-2 font-medium  text-opacity-90 lg:text-xl">
             Cadastre-se agora ou faca login para que voce tenha acesso a todas
             as funcionalidades.
           </p>
