@@ -62,9 +62,9 @@ export function DataTable() {
         const ws = wb.Sheets[wsname];
         const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
 
-        const headers = data[0] as string[]; // Definindo o tipo de 'headers' como string[]
+        const headers = data[0] as string[];
 
-        const excelData = data.slice(1).map((row) => {
+        const excelData = data.slice(1).map((row: string[]) => {
           const rowData: { [key: string]: any } = {};
           headers.forEach((header, index) => {
             rowData[header] = row[index];
