@@ -63,14 +63,16 @@ export function DataTable() {
           Array.isArray(headers) &&
           headers.every((header) => typeof header === "string")
         ) {
-          const excelData = data.slice(1).map((row: string[]) => {
-            // Adicionando tipagem explícita para 'row'
-            const rowData: { [key: string]: any } = {};
-            headers.forEach((header, index) => {
-              rowData[header] = row[index];
+          const excelData = data
+            .slice(1)
+            .map((row: string[], index: number, array: string[][]) => {
+              // Adicionando os três parâmetros esperados pela função map
+              const rowData: { [key: string]: any } = {};
+              headers.forEach((header, index) => {
+                rowData[header] = row[index];
+              });
+              return rowData;
             });
-            return rowData;
-          });
           setExcelData(excelData);
         } else {
           console.error("Os cabeçalhos das colunas não são válidos.");
@@ -82,6 +84,7 @@ export function DataTable() {
 
     reader.readAsBinaryString(file);
   };
+
   const handleColumnToggle = (column: string) => {
     if (selectedColumns.includes(column)) {
       setSelectedColumns(selectedColumns.filter((col) => col !== column));
