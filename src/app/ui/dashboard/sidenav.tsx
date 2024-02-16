@@ -9,7 +9,7 @@ export default function SideNav() {
       <Link href="/">
         <div className="flex items-center mb-4 cursor-pointer">
           <Image
-            src="/logo.png"
+            src="/Logo.png"
             alt="Logo"
             width={100}
             height={60}

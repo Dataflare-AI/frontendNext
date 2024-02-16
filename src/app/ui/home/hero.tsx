@@ -22,7 +22,7 @@ const Hero = () => {
                 href="/login"
                 target="_blank"
                 rel="noopener"
-                className="hover:bg-black hover:border-black hover:text-white bg-white text-black border border-black transition-all rounded-md md:ml-5 text-center px-8 py-4 text-lg font-medium"
+                className="hover:bg-black hover:border-white hover:border-black hover:text-white bg-white text-black border border-black transition-all rounded-md md:ml-5 text-center px-8 py-4 text-lg font-medium"
               >
                 Entrar
               </a>

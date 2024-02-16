@@ -5,7 +5,7 @@ import styles from "./navbar.module.css";
 import {
   MdNotifications,
   MdOutlineChat,
-  MdDashboard,
+  MdMenu,
   MdSearch,
 } from "react-icons/md";
 import { Moon, Sun } from "lucide-react";
@@ -50,21 +50,20 @@ const Navbar = () => {
     <div className={styles.container}>
       <div className={styles.title}></div>
       <div className={styles.menu}>
-        <div className={styles.search}>
+        {/* <div className={styles.search}>
           <MdSearch />
           <input
             type="text"
             placeholder="Pesquisar..."
             className={styles.input}
           />
-        </div>
+        </div> */}
         <div className={styles.icons}>
-          <MdOutlineChat size={20} />
-          <MdNotifications size={20} />
           <Link href="/dashboard">
-            <MdDashboard size={20} />
+            <MdMenu size={30} />
           </Link>
           <ModeToggle />
+          {/* <MdOutlineChat size={20} /> */}
         </div>
       </div>
     </div>

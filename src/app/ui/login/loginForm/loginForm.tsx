@@ -14,20 +14,20 @@ export default function LoginForm() {
   return (
     <form>
       <div className="flex flex-col md:flex-row h-screen">
-        <div className="flex items-center justify-center w-full md:w-1/3 h-full relative md:ml-32 lg:bg-white">
+        <div className="flex items-center justify-center w-full md:w-1/3 h-full relative md:ml-32">
           <Image
-            src="/loginMobile.jpeg"
+            src="/loginMobile.png"
             alt="Login Image"
-            width={600}
-            height={400}
+            width={400}
+            height={300}
             className="object-cover object-center"
           />
         </div>
-        <div className="flex items-center justify-center w-full md:w-2/3 h-full text-black bg-white lg:bg-white">
+        <div className="flex items-center justify-center w-full md:w-2/3 h-full">
           <div className="w-full max-w-md">
             <div className="text-center">
               <Image
-                src="/logo.png"
+                src="/Logo.png"
                 alt="Logo"
                 width={200}
                 height={60}
@@ -54,15 +54,12 @@ export default function LoginForm() {
             <div className="w-full">
               <div className="rounded-lg px-6 pb-4">
                 <div className="w-full mt-8">
-                  <label
-                    className="block text-xs font-medium text-gray-900"
-                    htmlFor="email"
-                  >
+                  <label className="block text-xs font-medium" htmlFor="email">
                     Email
                   </label>
                   <div className="relative">
                     <input
-                      className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                      className="peer block w-full rounded-md border border-black py-2 pl-10 text-sm outline-2"
                       id="email"
                       name="email"
                       type="email"
@@ -77,7 +74,7 @@ export default function LoginForm() {
                       viewBox="0 0 24 24"
                       strokeWidth={1.5}
                       stroke="currentColor"
-                      className="w-4 h-4 text-black absolute left-3 top-1/2 transform -translate-y-1/2"
+                      className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2"
                     >
                       <path
                         strokeLinecap="round"
@@ -89,14 +86,14 @@ export default function LoginForm() {
                 </div>
                 <div className="mt-4">
                   <label
-                    className="block text-xs font-medium text-gray-900"
+                    className="block text-xs font-medium"
                     htmlFor="password"
                   >
                     Senha
                   </label>
                   <div className="relative">
                     <input
-                      className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 pr-8 text-sm outline-2 placeholder:text-gray-500"
+                      className="peer block w-full rounded-md border border-black py-2 pl-10 pr-8 text-sm outline-2 "
                       id="password"
                       name="password"
                       type="password"
@@ -112,7 +109,7 @@ export default function LoginForm() {
                       viewBox="0 0 24 24"
                       strokeWidth={1.5}
                       stroke="currentColor"
-                      className="w-4 h-4 text-black absolute left-3 top-1/2 transform -translate-y-1/2"
+                      className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2"
                     >
                       <path
                         strokeLinecap="round"
@@ -132,7 +129,7 @@ export default function LoginForm() {
                     })
                   }
                   disabled={!email || !password}
-                  className="hover:bg-white hover:border-black hover:text-black hover:transition-colors mt-6 w-40 rounded-md bg-black py-2 text-white border border-transparent transition-border"
+                  className="mt-4 py-2 border-black hover:bg-black hover:text-white hover:transition-colors bg-white text-black border hover:border-white transition-border rounded-md w-full text-center"
                 >
                   Entrar
                 </button>

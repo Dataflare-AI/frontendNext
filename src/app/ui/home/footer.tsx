@@ -18,7 +18,7 @@ export default function Footer() {
                 className="flex items-center space-x-2 text-2xl font-medium text-black-500 dark:text-gray-100"
               >
                 <Image
-                  src="/logo.png"
+                  src="/Logo.png"
                   alt="Logo"
                   width={100}
                   height={60}

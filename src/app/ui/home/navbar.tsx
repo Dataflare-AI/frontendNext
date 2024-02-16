@@ -48,16 +48,16 @@ const Navbar = () => {
     setMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  const menuItemClass = `${openSans.className}px-4 py-2 text-lg font-normal no-underline rounded-md dark:text-gray-200 hover:text-black focus:bg-indigo-100 focus:outline-none dark:focus:bg-gray-800`;
+  const menuItemClass = `${openSans.className}px-4 py-2 text-lg font-normal no-underline rounded-md dark:text-gray-200 hover:text-black focus:outline-none`;
 
   return (
     <header className="w-full">
       <nav className="container relative flex flex-wrap items-center justify-between mx-auto lg:justify-between xl:px-0">
         {/* Logo  */}
-        <div className="px-4 flex items-center justify-between w-full lg:w-auto">
+        <div className="px-8 flex items-center justify-between w-full lg:w-auto">
           <Link href="/">
             <Image
-              src="/logo.png"
+              src="/Logo.png"
               alt="Logo"
               width={100}
               height={60}
@@ -69,10 +69,12 @@ const Navbar = () => {
           <button
             onClick={toggleMobileMenu}
             aria-label="Toggle Menu"
-            className="flex items-center px-2 py-1 ml-auto text-gray-500 rounded-md lg:hidden hover:text-gray-500 focus:text-gray-500 focus:bg-indigo-100 focus:outline-none dark:text-gray-300 dark:focus:bg-trueGray-700"
+            className="flex items-center px-2 py-1 ml-auto text-gray-500 rounded-md lg:hidden hover:text-gray-500 dark:text-gray-300 dark:focus:bg-trueGray-700"
             role="button"
           >
-            <ModeToggle />
+            <div className="mx-2">
+              <ModeToggle />
+            </div>
             {isMobileMenuOpen ? (
               <svg
                 className="w-6 h-6 fill-current"
@@ -104,20 +106,20 @@ const Navbar = () => {
         <div
           className={`${
             isMobileMenuOpen ? "flex" : "hidden"
-          } flex-wrap w-full my-5 px-5 slg:flex lg:hidden`}
+          } flex-wrap w-full my-2 px-8 slg:flex lg:hidden`}
         >
           {navigation.map((item) => (
             <Link
               key={item}
               href="/"
-              className={`${menuItemClass} w-full px-4 py-2 -ml-4 text-gray-500 rounded-md dark:text-gray-300 hover:text-gray-500 focus:text-gray-500 focus:bg-gray-100 dark:focus:bg-gray-800 focus:outline-none`}
+              className={`${menuItemClass} w-full px-4 py-4 -ml-4 text-gray-500 rounded-md dark:text-gray-300 hover:text-gray-500 focus:text-gray-500 focus:bg-gray-100focus:outline-none`}
             >
               {item}
             </Link>
           ))}
           <Link
             href="/login"
-            className={`${openSans.className}px-6 py-2 hover:bg-white hover:border-black hover:text-black hover:transition-colors bg-black text-white border border-transparent transition-border rounded-md  w-full text-center`}
+            className={`${openSans.className}px-6 py-2 border-black hover:bg-black hover:text-white hover:transition-colors bg-white text-black border hover:border-white transition-border rounded-md md:ml-5 w-full text-center`}
           >
             Entrar
           </Link>
@@ -139,7 +141,7 @@ const Navbar = () => {
         <div className="hidden mr-3 space-x-4 lg:flex nav__item">
           <Link
             href="/login"
-            className={`${openSans.className}px-6 py-2 hover:bg-white hover:border-black hover:text-black hover:transition-colors bg-black text-white border border-transparent transition-border rounded-md md:ml-5 w-40 text-center`}
+            className={`${openSans.className}px-6 py-2 border-black hover:bg-black hover:text-white hover:transition-colors bg-white text-black border hover:border-white transition-border rounded-md md:ml-5 w-40 text-center`}
           >
             Entrar
           </Link>

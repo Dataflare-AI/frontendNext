@@ -20,7 +20,7 @@ interface BenefitsProps {
 
 const Benefits: React.FC<BenefitsProps> = ({ data }) => {
   return (
-    <Container className="flex flex-wrap mb-20 lg:gap-10 lg:flex-nowrap">
+    <Container className="flex flex-wrap mb-20 lg:gap-10 lg:flex-nowrap mx-auto">
       <div
         className={`flex items-center justify-center w-full lg:w-1/2 ${
           data.imgPos === "right" ? "lg:order-1" : ""

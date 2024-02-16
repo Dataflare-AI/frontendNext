@@ -1,16 +1,9 @@
 .container {
-    padding: 20px;
-    border-radius: 10px;
+    padding: 10px;
     background-color: var(--bgSoft);
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-
-.title {
-    color: var(--textSoft);
-    font-weight: bold;
-    text-transform: capitalize;
 }
 
 .menu {
@@ -23,7 +16,6 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    background-color: #dfdfdf;
     padding: 10px;
     border-radius: 10px;
 }

@@ -3,17 +3,7 @@ import Image from "next/image";
 import MenuLink from "./menuLink/menuLink";
 import styles from "./sidebar.module.css";
 
-import {
-  MdDashboard,
-  MdSupervisedUserCircle,
-  MdShoppingBag,
-  MdAttachMoney,
-  MdAnalytics,
-  MdPeople,
-  MdOutlineSettings,
-  MdHelpCenter,
-  MdLogout,
-} from "react-icons/md";
+import { MdNotifications } from "react-icons/md";
 import { FaFileExcel } from "react-icons/fa";
 
 const menuItems = [
@@ -89,10 +79,12 @@ export default function Sidebar() {
           alt=""
           width="30"
           height="30"
+          className={styles.userImage}
         />
         <div className={styles.userDetail}>
           <span className={styles.userTitle}>Administrator</span>
         </div>
+        <MdNotifications size={20} />
       </div>
       <ul className={styles.list}>
         {menuItems.map((cat, index) => (

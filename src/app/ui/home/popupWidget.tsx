@@ -62,7 +62,7 @@ const PopupWidget = () => {
       <Disclosure>
         {({ open }) => (
           <>
-            <Disclosure.Button className="fixed z-40 flex items-center justify-center transition duration-300 bg-black rounded-full shadow-lg right-5 bottom-5 w-14 h-14 focus:outline-none focus:bg-black ease">
+            <Disclosure.Button className="fixed z-40 flex items-center justify-center transition duration-300 border-black hover:bg-black bg-white border hover:border-white rounded-full shadow-lg right-5 bottom-5 w-14 h-14 focus:outline-none ease">
               <span className="sr-only">Open Contact form Widget</span>
               <Transition
                 show={!open}
@@ -70,7 +70,7 @@ const PopupWidget = () => {
                 enterFrom="opacity-0 -rotate-45 scale-75"
                 leave="transition duration-100 transform ease"
                 leaveTo="opacity-0 -rotate-45"
-                className="absolute w-6 h-6 text-white"
+                className="absolute w-6 h-6 text-black hover:text-white"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -94,7 +94,7 @@ const PopupWidget = () => {
                 enterFrom="opacity-0 rotate-45 scale-75"
                 leave="transition duration-100 transform ease"
                 leaveTo="opacity-0 rotate-45"
-                className="absolute w-6 h-6 text-white"
+                className="absolute w-6 h-6 text-black hover:text-white"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -120,7 +120,7 @@ const PopupWidget = () => {
               leave="transition duration-200 transform ease"
               leaveTo="opacity-0 translate-y-5"
             >
-              <Disclosure.Panel className=" flex flex-col  overflow-hidden left-0 h-full w-full sm:w-[350px] min-h-[250px] sm:h-[600px] border border-black dark:border-black bg-white shadow-2xl rounded-md sm:max-h-[calc(100vh-120px)]">
+              <Disclosure.Panel className=" flex flex-col  overflow-hidden left-0 h-full w-full sm:w-[350px] min-h-[250px] sm:h-[600px] border bg-white shadow-2xl rounded-md sm:max-h-[calc(100vh-120px)]">
                 <div className="flex flex-col items-center justify-center h-32 p-5 bg-black">
                   <h3 className="text-lg text-white">Como podemos ajudar?</h3>
                   <p className="text-white opacity-50">
