@@ -13,27 +13,27 @@ interface LayoutProps {
 }
 
 export default function Layout({ children }: LayoutProps) {
-  const { data: session, status } = useSession();
+  // const { data: session, status } = useSession();
 
   return (
-    <SessionProvider session={session}>
-      <div className={styles.container}>
-        <div className={styles.menu}>
-          <Sidebar />
-        </div>
-        <div className={styles.content}>
-          <Navbar />
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
-          <Footer />
-        </div>
+    // <SessionProvider session={session}>
+    <div className={styles.container}>
+      <div className={styles.menu}>
+        <Sidebar />
       </div>
-    </SessionProvider>
+      <div className={styles.content}>
+        <Navbar />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+        <Footer />
+      </div>
+    </div>
+    // </SessionProvider>
   );
 }

@@ -85,6 +85,7 @@ export function DataTable() {
   };
 
   const handleColumnToggle = (column: string) => {
+    console.log(column);
     if (selectedColumns.includes(column)) {
       setSelectedColumns(selectedColumns.filter((col) => col !== column));
     } else {
@@ -261,7 +262,7 @@ export function DataTable() {
                       <Checkbox
                         id={header}
                         checked={selectedColumns.includes(header)}
-                        onChange={() => handleColumnToggle(header)}
+                        onClick={() => handleColumnToggle(header)}
                       />
                       <Label htmlFor={header}>{header}</Label>
                     </div>
