@@ -34,17 +34,6 @@ export function DataTable() {
   const [fileSize, setFileSize] = useState<number | null>(null);
   const totalRows = excelData.length;
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setProgress((prevProgress) => {
-        const newProgress = prevProgress + Math.random() * 10;
-        return newProgress;
-      });
-    }, 800);
-
-    return () => clearInterval(interval);
-  }, []);
-
   const handleExcelUpload = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
 
@@ -58,11 +47,6 @@ export function DataTable() {
     processExcelFile(file);
   };
 
-  const handleFileSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    fileInputRef.current?.click();
-  };
-
   const processExcelFile = (file: File) => {
     const fileName = file.name.toLowerCase();
     if (!fileName.endsWith(".xlsx") && !fileName.endsWith(".csv")) {
@@ -70,6 +54,7 @@ export function DataTable() {
       return;
     }
 
+    setIsLoading(true); // Ativa o indicador de carregamento
     const reader = new FileReader();
 
     reader.onload = (evt) => {
@@ -98,6 +83,17 @@ export function DataTable() {
       }
     };
 
+    reader.onprogress = (event) => {
+      if (event.lengthComputable) {
+        const progress = (event.loaded / event.total) * 10;
+        setProgress(progress);
+      }
+    };
+
+    reader.onloadend = () => {
+      setIsLoading(false); // Desativa o indicador de carregamento quando o arquivo é totalmente carregado
+    };
+
     reader.readAsBinaryString(file);
   };
 
@@ -118,7 +114,10 @@ export function DataTable() {
 
   return (
     <div className="w-full relative">
-      <div className="loading h-1 w-[0%] bg-red-500 transition-all duration-200 absolute z-40 top-0 "></div>
+      {isLoading && (
+        <div className="loading h-2 w-[100%] bg-black transition-all duration-200 absolute z-40 top-0 "></div>
+      )}
+
       <div className="flex-col md:flex-row items-stretch">
         <div className="flex items-center justify-center w-full">
           <label
