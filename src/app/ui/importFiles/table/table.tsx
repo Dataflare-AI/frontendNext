@@ -33,6 +33,9 @@ export function DataTable() {
   const [fileName, setFileName] = useState<string | null>(null);
   const [fileSize, setFileSize] = useState<number | null>(null);
   const totalRows = excelData.length;
+  const [sheetNames, setSheetNames] = useState<string[]>([]);
+  const [selectedSheet, setSelectedSheet] = useState<string>("");
+  const [wb, setWb] = useState<any>(null);
 
   const handleExcelUpload = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -45,8 +48,8 @@ export function DataTable() {
     const file = files[0];
     setExcelFile(file); // Definindo o arquivo selecionado no estado excelFile
     processExcelFile(file);
+    setIsSheetLoading(true); // Ativa o diálogo de seleção de planilha assim que o arquivo é carregado
   };
-
   const processExcelFile = (file: File) => {
     const fileName = file.name.toLowerCase();
     if (!fileName.endsWith(".xlsx") && !fileName.endsWith(".csv")) {
@@ -64,6 +67,9 @@ export function DataTable() {
         const wsname = wb.SheetNames[0];
         const ws = wb.Sheets[wsname];
         const data = XLSX.utils.sheet_to_json(ws, { header: 1 }) as string[][];
+
+        setSheetNames(wb.SheetNames); // Set sheet names first
+        setWb(wb);
 
         const headers = data[0] as string[];
 
@@ -97,6 +103,17 @@ export function DataTable() {
     reader.readAsBinaryString(file);
   };
 
+  const handleSheetSelection = (sheetName: string) => {
+    setSelectedSheet(sheetName);
+    setIsSheetLoading(true);
+    const ws = wb.Sheets[sheetName];
+    const data = XLSX.utils.sheet_to_json(ws, { header: 1 }) as string[][];
+    // Process the data of the selected sheet
+    // Update the excelData state with the data of the selected sheet
+    setExcelData(data); // Update excelData with the data of the selected sheet
+    setIsSheetLoading(false); // Set isSheetLoading to false after data processing
+  };
+
   const handleColumnToggle = (column: string) => {
     console.log(column);
     if (selectedColumns.includes(column)) {
@@ -115,7 +132,7 @@ export function DataTable() {
   return (
     <div className="w-full relative">
       {isLoading && (
-        <div className="loading h-2 w-[100%] bg-black transition-all duration-200 absolute z-40 top-0 "></div>
+        <div className="loading h-2 w-[100%] bg-green-700 transition-all duration-200 absolute z-40 top-0 "></div>
       )}
 
       <div className="flex-col md:flex-row items-stretch">
@@ -157,6 +174,25 @@ export function DataTable() {
           </label>
         </div>
       </div>
+      <Dialog open={isSheetLoading}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Selecione uma Página</DialogTitle>
+          </DialogHeader>
+          <ScrollArea className="h-60">
+            {sheetNames.map((sheetName) => (
+              <p
+                key={sheetName}
+                onClick={() => handleSheetSelection(sheetName)}
+                className="cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 p-2 rounded-md"
+              >
+                {sheetName}
+              </p>
+            ))}
+          </ScrollArea>
+        </DialogContent>
+      </Dialog>
+
       {excelFile && (
         <Dialog>
           <DialogTrigger>
@@ -209,41 +245,51 @@ export function DataTable() {
       <div className="rounded-md border">
         <Table>
           <TableBody>
-            {excelData.length > 0 &&
-              Object.keys(excelData[0]).map((header, index) => (
-                <TableRow key={index}>
-                  <TableCell>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id={header}
-                        checked={selectedColumns.includes(header)}
-                        onClick={() => handleColumnToggle(header)}
-                      />
-                      <Label htmlFor={header}>{header}</Label>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Dialog>
-                      <DialogTrigger onClick={() => handleCellClick(header)}>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth="1.5"
-                          stroke="currentColor"
-                          className="w-6 h-6"
+            {excelData.length > 0 && (
+              <>
+                {Object.keys(excelData[0]).map((columnName, index) => (
+                  <TableRow key={index}>
+                    <TableCell>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id={columnName}
+                          checked={selectedColumns.includes(columnName)}
+                          onClick={() => handleColumnToggle(columnName)}
+                        />
+                        <label
+                          htmlFor={columnName}
+                          className="text-sm font-medium leading-none"
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"
-                          />
-                        </svg>
-                      </DialogTrigger>
-                    </Dialog>
-                  </TableCell>
-                </TableRow>
-              ))}
+                          {columnName}
+                        </label>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Dialog>
+                        <DialogTrigger
+                          onClick={() => handleCellClick(columnName)}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth="1.5"
+                            stroke="currentColor"
+                            className="w-6 h-6 cursor-pointer"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"
+                            />
+                          </svg>
+                        </DialogTrigger>
+                      </Dialog>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </>
+            )}
           </TableBody>
         </Table>
       </div>
