@@ -5,6 +5,8 @@ import styles from "./sidebar.module.css";
 
 import { MdNotifications } from "react-icons/md";
 import { FaFileExcel } from "react-icons/fa";
+import { CiLogout } from "react-icons/ci";
+import Link from "next/link";
 
 const menuItems = [
   {
@@ -40,11 +42,6 @@ const menuItems = [
         path: "/dashboard/importFiles",
         icon: <FaFileExcel />,
       },
-      {
-        title: "Sair",
-        path: "/",
-        icon: <FaFileExcel />,
-      },
       // {
       //   title: "Reports",
       //   path: "/dashboard/reports",
@@ -74,6 +71,12 @@ const menuItems = [
   // },
 ];
 
+const logoutItem = {
+  title: "Sair",
+  path: "/",
+  icon: <CiLogout size={20} />,
+};
+
 export default function Sidebar() {
   return (
     <div className={styles.container}>
@@ -93,7 +96,7 @@ export default function Sidebar() {
       </div>
       <ul className={styles.list}>
         {menuItems.map((cat, index) => (
-          <li key={index} className={index === 1 ? styles.centerItem : ""}>
+          <li key={index}>
             <span className={styles.cat}></span>
             {cat.list.map((item) => (
               <MenuLink item={item} key={item.title} />
@@ -101,6 +104,11 @@ export default function Sidebar() {
           </li>
         ))}
       </ul>
+      <Link href={"/"}>
+        <button className={styles.logout}>
+          {logoutItem.icon} {logoutItem.title}
+        </button>
+      </Link>
     </div>
   );
 }
