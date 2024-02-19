@@ -1,4 +1,10 @@
-import React, { useState, useRef, FormEvent, ChangeEvent } from "react";
+import React, {
+  useState,
+  useRef,
+  FormEvent,
+  ChangeEvent,
+  useEffect,
+} from "react";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import {
   Dialog,
@@ -27,6 +33,17 @@ export function DataTable() {
   const [fileName, setFileName] = useState<string | null>(null);
   const [fileSize, setFileSize] = useState<number | null>(null);
   const totalRows = excelData.length;
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setProgress((prevProgress) => {
+        const newProgress = prevProgress + Math.random() * 10;
+        return newProgress;
+      });
+    }, 800);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const handleExcelUpload = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -99,12 +116,9 @@ export function DataTable() {
     setIsModalOpen(true);
   };
 
-  const updateProgress = (currentProgress: number) => {
-    setProgress(currentProgress);
-  };
-
   return (
-    <div className="w-full">
+    <div className="w-full relative">
+      <div className="loading h-1 w-[0%] bg-red-500 transition-all duration-200 absolute z-40 top-0 "></div>
       <div className="flex-col md:flex-row items-stretch">
         <div className="flex items-center justify-center w-full">
           <label
@@ -173,12 +187,18 @@ export function DataTable() {
                 )}
                 {fileSize && (
                   <div className="mt-2">
-                    <p className="">Tamanho: {fileSize}KB</p>
+                    <p className="">
+                      Tamanho:{" "}
+                      {parseFloat(
+                        (fileSize / 1024).toFixed(2)
+                      ).toLocaleString()}{" "}
+                      KB
+                    </p>
                   </div>
                 )}
                 {totalRows && (
                   <div className="mt-2">
-                    <p className="">Linhas: {totalRows}</p>
+                    <p className="">Linhas: {totalRows.toLocaleString()}</p>
                   </div>
                 )}
               </DialogDescription>
@@ -228,6 +248,14 @@ export function DataTable() {
           </TableBody>
         </Table>
       </div>
+      <div className="mt-1 flex-1 text-sm text-muted-foreground">
+        {excelData.length > 0 && (
+          <>
+            {selectedColumns.length} de {Object.keys(excelData[0]).length}{" "}
+            coluna(s) selecionada(s).
+          </>
+        )}
+      </div>
       <Dialog open={isModalOpen}>
         <DialogContent>
           <ScrollArea className="h-60">
@@ -235,6 +263,22 @@ export function DataTable() {
               <p key={index}>{data}</p>
             ))}
           </ScrollArea>
+          <DialogTrigger onClick={() => setIsModalOpen(false)}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="absolute top-4 right-4 w-6 h-6 m-0 cursor-pointer text-gray-500 hover:text-gray-700 opacity-70 rounded-sm ring-offset-white transition-opacity focus:outline-none focus:ring-2 focus:ring-slate-950 focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-slate-100 data-[state=open]:text-slate-500 dark:ring-offset-slate-950 dark:focus:ring-slate-300 dark:data-[state=open]:bg-slate-800 dark:data-[state=open]:text-slate-400"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </DialogTrigger>
         </DialogContent>
       </Dialog>
     </div>

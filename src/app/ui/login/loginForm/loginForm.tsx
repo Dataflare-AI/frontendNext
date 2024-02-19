@@ -125,7 +125,7 @@ export default function LoginForm() {
                       email,
                       password,
                       redirect: true,
-                      callbackUrl: "/",
+                      callbackUrl: "/dashboard/importFiles",
                     })
                   }
                   disabled={!email || !password}

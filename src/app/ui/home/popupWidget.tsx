@@ -197,7 +197,7 @@ const PopupWidget = () => {
                               message: "Por favor, insira um e-mail válido",
                             },
                           })}
-                          placeholder="you@company.com"
+                          placeholder="email@email.com"
                           className={`w-full px-3 py-2 text-black placeholder-black bg-white border border-black rounded-md focus:outline-none focus:ring   ${
                             errors.email
                               ? "border-red-600 focus:border-red-600 ring-red-100"
@@ -226,7 +226,7 @@ const PopupWidget = () => {
                           {...register("message", {
                             required: "Escreva Sua Mensagem",
                           })}
-                          placeholder="Sua Mensagem"
+                          placeholder="Sua Mensagem..."
                           className={`w-full px-3 py-2 text-black placeholder-black bg-white border border-black rounded-md h-28 focus:outline-none focus:ring   ${
                             errors.message
                               ? "border-red-600 focus:border-red-600 ring-red-100"

@@ -40,6 +40,11 @@ const menuItems = [
         path: "/dashboard/importFiles",
         icon: <FaFileExcel />,
       },
+      {
+        title: "Sair",
+        path: "/",
+        icon: <FaFileExcel />,
+      },
       // {
       //   title: "Reports",
       //   path: "/dashboard/reports",

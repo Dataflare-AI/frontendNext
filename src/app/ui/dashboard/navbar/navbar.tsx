@@ -59,9 +59,9 @@ const Navbar = () => {
           />
         </div> */}
         <div className={styles.icons}>
-          <Link href="/dashboard">
+          {/* <Link href="/dashboard">
             <MdMenu size={30} />
-          </Link>
+          </Link> */}
           <ModeToggle />
           {/* <MdOutlineChat size={20} /> */}
         </div>
