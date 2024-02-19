@@ -104,7 +104,7 @@ export default function Sidebar() {
           </li>
         ))}
       </ul>
-      <Link href={"/"}>
+      <Link href={"/login"}>
         <button className={styles.logout}>
           {logoutItem.icon} {logoutItem.title}
         </button>

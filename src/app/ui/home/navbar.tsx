@@ -14,29 +14,24 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export function ModeToggle() {
-  const { setTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
+  const [isDarkMode, setIsDarkMode] = useState(theme === "dark");
+
+  const toggleTheme = () => {
+    const newTheme = isDarkMode ? "light" : "dark";
+    setTheme(newTheme);
+    setIsDarkMode(!isDarkMode);
+  };
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon">
-          <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-          <span className="sr-only">Toggle theme</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")}>
-          Claro
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
-          Escuro
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
-          Sistema
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <button onClick={toggleTheme} className="focus:outline-none">
+      {isDarkMode ? (
+        <Moon className="h-[1.2rem] w-[1.2rem] dark:rotate-0 dark:scale-100" />
+      ) : (
+        <Sun className="h-[1.2rem] w-[1.2rem]" />
+      )}
+      <span className="sr-only">Toggle theme</span>
+    </button>
   );
 }
 
@@ -53,7 +48,6 @@ const Navbar = () => {
   return (
     <header className="w-full">
       <nav className="container relative flex flex-wrap items-center justify-between mx-auto lg:justify-between xl:px-0">
-        {/* Logo  */}
         <div className="px-8 flex items-center justify-between w-full lg:w-auto">
           <Link href="/">
             <Image
@@ -72,9 +66,8 @@ const Navbar = () => {
             className="flex items-center px-2 py-1 ml-auto text-gray-500 rounded-md lg:hidden hover:text-gray-500 dark:text-gray-300 dark:focus:bg-trueGray-700"
             role="button"
           >
-            <div className="mx-2">
-              <ModeToggle />
-            </div>
+            <ModeToggle />
+            <div className="mx-2"></div>
             {isMobileMenuOpen ? (
               <svg
                 className="w-6 h-6 fill-current"
